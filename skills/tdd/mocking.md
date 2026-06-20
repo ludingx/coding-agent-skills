@@ -39,4 +39,32 @@ Fakes are reusable, readable, and can encode real constraints (e.g. duplicate de
 
 ## Designing for Mockability
 
-See [interface-design.md](interface-design.md) for how to design interfaces that are easy to swap.
+**Use dependency injection** — pass dependencies in rather than constructing them internally:
+
+```typescript
+// Easy to swap
+function processPayment(order, paymentClient) {
+  return paymentClient.charge(order.total);
+}
+
+// Hard to swap
+function processPayment(order) {
+  const client = new StripeClient(process.env.STRIPE_KEY);
+  return client.charge(order.total);
+}
+```
+
+**Prefer SDK-style interfaces over generic fetchers** — one function per operation:
+
+```typescript
+// GOOD: each function independently mockable, one shape per call
+const api = {
+  getUser: (id) => fetch(`/users/${id}`),
+  createOrder: (data) => fetch('/orders', { method: 'POST', body: data }),
+};
+
+// BAD: mocking requires conditional logic inside the mock
+const api = {
+  fetch: (endpoint, options) => fetch(endpoint, options),
+};
+```
