@@ -1,0 +1,15 @@
+{
+  "name": "software-agent-skills",
+  "version": "1.0.0",
+  "description": "Reusable skills and commands for AI coding agents",
+  "skills": [
+    {
+      "name": "surgical-changes",
+      "path": "./skills/surgical-changes"
+    },
+    {
+      "name": "tdd",
+      "path": "./skills/tdd"
+    }
+  ]
+}

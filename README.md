@@ -1,40 +1,54 @@
 # software-agent-skills
 
-A collection of reusable skills and commands for AI coding agents — Claude Code, OpenCode, Codex, Copilot, and others.
+Reusable skills and commands for AI coding agents — Claude Code and OpenCode.
 
 ## Structure
 
 ```
 skills/
-  surgical-changes/   # Make the smallest change that satisfies the task
-  tdd/                # Test-driven development with red-green-refactor loop
-commands/
-  build.md            # Build and deliver a Jira ticket end-to-end
+  surgical-changes/SKILL.md   # Smallest change that satisfies the task
+  tdd/SKILL.md                # Test-driven development, red-green-refactor
+.claude/
+  commands/
+    build.md                  # /build slash command for Claude Code
+.opencode/
+  agents/
+    sde-agent.md              # SDE agent for OpenCode
+CLAUDE.md                     # Claude Code instructions
+AGENTS.md                     # OpenCode instructions
+plugin.json                   # Claude Code plugin registration
 ```
 
 ## Skills
 
 ### surgical-changes
-Guides the agent to make the minimum change required — no scope creep, no speculative cleanup, no unasked-for abstractions. Use when implementing features, fixing bugs, or writing tests in an existing codebase.
+Make the minimum change required — no scope creep, no speculative cleanup, no unasked-for abstractions. Use when implementing features, fixing bugs, or writing tests in an existing codebase.
 
 ### tdd
 Test-driven development using vertical slices (tracer bullets). One failing test → minimal code to pass → next slice. Avoids the horizontal-slicing anti-pattern of writing all tests up front.
 
 ## Commands
 
-### build
-End-to-end workflow for delivering a Jira ticket: fetch ticket → plan → TDD implementation → raise PR → monitor CI → cleanup. Designed for Claude Code's `/build` slash command.
+### /build (Claude Code)
+End-to-end workflow for delivering a Jira ticket: fetch ticket → plan → TDD implementation → raise PR → monitor CI → cleanup.
 
-## Usage
+## Installation
 
 ### Claude Code
-Symlink skills into `~/.claude/skills/` and commands into `~/.claude/commands/`:
-
 ```bash
-ln -s ~/software-agent-skills/skills/surgical-changes ~/.claude/skills/surgical-changes
-ln -s ~/software-agent-skills/skills/tdd ~/.claude/skills/tdd
-ln -s ~/software-agent-skills/commands/build.md ~/.claude/commands/build.md
+git clone https://github.com/ludingx/software-agent-skills.git
+cd software-agent-skills
+claude --plugin-dir .
 ```
 
-### Other agents
-Reference the `SKILL.md` files directly in your agent's system prompt or context.
+Or add to your project's `CLAUDE.md`:
+```
+Use skills from: https://github.com/ludingx/software-agent-skills
+```
+
+### OpenCode
+```bash
+git clone https://github.com/ludingx/software-agent-skills.git ~/.config/opencode/software-agent-skills
+```
+
+Then reference `sde-agent` in your project's `opencode.json`.
