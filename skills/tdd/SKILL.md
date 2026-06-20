@@ -9,15 +9,11 @@ description: Test-driven development with red-green-refactor loop. Use when user
 
 **Core principle**: Tests should verify behavior, not implementation details. Code can change entirely; tests shouldn't break unless observable behavior changes.
 
-There are two established TDD schools — choose based on what you're testing:
+Use real collaborators by default. Mock when the real collaborator is a liability — slow, has side effects, non-deterministic, or already well-tested elsewhere. Always mock at system boundaries (external HTTP, DB, clock, filesystem).
 
-**Chicago school (classicist)** — default for most feature work. Use real collaborators you own; mock only at system boundaries (external HTTP, DB, clock). Tests verify outcomes: "did the customer get charged the right amount?" These tests survive internal refactors because they don't care about structure.
+**Bad tests**: testing private methods, verifying through external means (querying a DB directly instead of through the interface), or mocking so heavily that tests mirror implementation structure. The warning sign: your test breaks when you refactor but behavior hasn't changed.
 
-**London school (mockist)** — appropriate for complex isolated logic or when doing design-first TDD to feel out interfaces. Mock collaborators explicitly, test each unit in isolation. Tests verify interactions: "was `charge` called with the right value?" Useful when a unit's logic is intricate enough to warrant tight isolation, or when the collaborator is expensive to construct.
-
-**Bad tests** regardless of school: testing private methods, verifying through external means (querying a DB directly instead of using the interface), or mocking so heavily that tests become a mirror of implementation. The warning sign: your test breaks when you refactor, but behavior hasn't changed.
-
-See [tests.md](tests.md) for examples and [mocking.md](mocking.md) for mocking guidelines and when to apply each school.
+See [tests.md](tests.md) for examples and [mocking.md](mocking.md) for mocking guidelines.
 
 ## Anti-Pattern: Horizontal Slices
 
