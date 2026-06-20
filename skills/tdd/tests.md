@@ -37,7 +37,7 @@ test("checkout calls paymentService.process", async () => {
 
 Red flags:
 
-- Mocking internal collaborators
+- Mocking internal collaborators that are pure or cheap to construct (use the real thing)
 - Testing private methods
 - Asserting on call counts/order
 - Test breaks when refactoring without behavior change
