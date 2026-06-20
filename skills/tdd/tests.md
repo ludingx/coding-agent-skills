@@ -51,11 +51,25 @@ test("checkout charges the cart total", async () => {
 });
 ```
 
+```typescript
+// GOOD: Verifies through interface — survives switching from SQL to any other store
+// (contrast with the bad version in Bad Tests below)
+test("createUser makes user retrievable", async () => {
+  // Arrange
+  const name = "Alice";
+
+  // Act
+  const user = await createUser({ name });
+
+  // Assert
+  const retrieved = await getUser(user.id);
+  expect(retrieved.name).toBe(name);
+});
+```
+
 Characteristics:
 
 - Tests behavior users/callers care about
-- Uses public API only
-- Survives internal refactors
 - Describes WHAT, not HOW
 - One logical assertion per test
 
@@ -75,17 +89,11 @@ test("checkout calls paymentService.process", async () => {
 
 ```typescript
 // BAD: Bypasses interface to verify — couples test to storage implementation
+// (see the good version in Good Tests above)
 test("createUser saves to database", async () => {
   await createUser({ name: "Alice" });
   const row = await db.query("SELECT * FROM users WHERE name = ?", ["Alice"]);
   expect(row).toBeDefined();
-});
-
-// GOOD: Verifies through interface — survives switching from SQL to any other store
-test("createUser makes user retrievable", async () => {
-  const user = await createUser({ name: "Alice" });
-  const retrieved = await getUser(user.id);
-  expect(retrieved.name).toBe("Alice");
 });
 ```
 
