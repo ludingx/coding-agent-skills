@@ -7,13 +7,17 @@ description: Test-driven development with red-green-refactor loop. Use when user
 
 ## Philosophy
 
-**Core principle**: Tests should verify behavior through public interfaces, not implementation details. Code can change entirely; tests shouldn't.
+**Core principle**: Tests should verify behavior, not implementation details. Code can change entirely; tests shouldn't break unless observable behavior changes.
 
-**Good tests** are integration-style: they exercise real code paths through public APIs. They describe _what_ the system does, not _how_ it does it. A good test reads like a specification - "user can checkout with valid cart" tells you exactly what capability exists. These tests survive refactors because they don't care about internal structure.
+There are two established TDD schools — choose based on what you're testing:
 
-**Bad tests** are coupled to implementation. They mock internal collaborators, test private methods, or verify through external means (like querying a database directly instead of using the interface). The warning sign: your test breaks when you refactor, but behavior hasn't changed. If you rename an internal function and tests fail, those tests were testing implementation, not behavior.
+**Chicago school (classicist)** — default for most feature work. Use real collaborators you own; mock only at system boundaries (external HTTP, DB, clock). Tests verify outcomes: "did the customer get charged the right amount?" These tests survive internal refactors because they don't care about structure.
 
-See [tests.md](tests.md) for examples and [mocking.md](mocking.md) for mocking guidelines.
+**London school (mockist)** — appropriate for complex isolated logic or when doing design-first TDD to feel out interfaces. Mock collaborators explicitly, test each unit in isolation. Tests verify interactions: "was `charge` called with the right value?" Useful when a unit's logic is intricate enough to warrant tight isolation, or when the collaborator is expensive to construct.
+
+**Bad tests** regardless of school: testing private methods, verifying through external means (querying a DB directly instead of using the interface), or mocking so heavily that tests become a mirror of implementation. The warning sign: your test breaks when you refactor, but behavior hasn't changed.
+
+See [tests.md](tests.md) for examples and [mocking.md](mocking.md) for mocking guidelines and when to apply each school.
 
 ## Anti-Pattern: Horizontal Slices
 
