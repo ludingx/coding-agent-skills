@@ -89,7 +89,6 @@ Rules:
 After all tests pass, look for [refactor candidates](refactoring.md):
 
 - [ ] Extract duplication
-- [ ] Deepen modules (move complexity behind simple interfaces)
 - [ ] Apply SOLID principles where natural
 - [ ] Consider what new code reveals about existing code
 - [ ] Run tests after each refactor step

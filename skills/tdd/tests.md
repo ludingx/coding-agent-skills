@@ -2,7 +2,7 @@
 
 ## Good Tests
 
-**Integration-style**: Test through real interfaces, not mocks of internal parts.
+**Behavior-focused**: Test through public interfaces, not internal implementation details.
 
 ```typescript
 // GOOD: Tests observable behavior
