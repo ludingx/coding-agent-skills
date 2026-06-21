@@ -7,7 +7,7 @@ description: Test-driven development with red-green-refactor loop. Use when user
 
 ## Philosophy
 
-**Core principle**: Tests should verify behavior, not implementation details. Code can change entirely; tests shouldn't break unless observable behavior changes.
+**Core principle**: Tests should verify behavior, not implementation details. Code can change entirely; tests shouldn't break unless observable behavior changes. Expected exceptions: public API changes (method renames, signature changes) will require test updates — those are part of the observable contract.
 
 Use real collaborators by default. Mock when the real collaborator is a liability — slow, has side effects, non-deterministic, or already well-tested elsewhere. Always mock at system boundaries (external HTTP, DB, clock, filesystem).
 
