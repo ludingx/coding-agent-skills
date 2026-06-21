@@ -12,7 +12,6 @@ When a user request matches a skill's intent, load and follow the skill from `sk
 |---|---|
 | Implementing a feature or fixing a bug | `skills/surgical-changes/SKILL.md` |
 | Building with tests, TDD, red-green-refactor | `skills/tdd/SKILL.md` |
-| Delivering a Jira ticket end-to-end | `.opencode/agents/sde-agent.md` |
 
 ## Skill Structure
 

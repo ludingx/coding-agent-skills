@@ -1,6 +1,6 @@
 # software-agent-skills
 
-Reusable skills and commands for AI coding agents — Claude Code and OpenCode.
+Reusable skills and commands for AI coding agents — Claude Code.
 
 ## Structure
 
@@ -11,11 +11,7 @@ skills/
 .claude/
   commands/
     build.md                  # /build slash command for Claude Code
-.opencode/
-  agents/
-    sde-agent.md              # SDE agent for OpenCode
 CLAUDE.md                     # Claude Code instructions
-AGENTS.md                     # OpenCode instructions
 plugin.json                   # Claude Code plugin registration
 ```
 
@@ -46,9 +42,3 @@ Or add to your project's `CLAUDE.md`:
 Use skills from: https://github.com/ludingx/software-agent-skills
 ```
 
-### OpenCode
-```bash
-git clone https://github.com/ludingx/software-agent-skills.git ~/.config/opencode/software-agent-skills
-```
-
-Then reference `sde-agent` in your project's `opencode.json`.
