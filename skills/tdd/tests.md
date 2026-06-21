@@ -1,104 +1,102 @@
-# Good and Bad Tests
+# Tests
 
-Use **AAA (Arrange, Act, Assert)** to structure every test:
+Use **AAA (Arrange, Act, Assert)** to structure every test.
 
-```typescript
-test("description of behavior", async () => {
-  // Arrange — set up state and dependencies
-  const cart = createCart();
-  cart.add(product);
+## Pattern 1 — Unit: pure result
 
-  // Act — invoke the behavior
-  const result = await checkout(cart, paymentMethod);
+Assert on the return value or state change. No mocks needed.
 
-  // Assert — verify the outcome
-  expect(result.status).toBe("confirmed");
-});
-```
-
-## Good Tests
-
-**Behavior-focused**: Test through public interfaces, not internal implementation details.
-
-```typescript
-// GOOD: State assertion — verifies observable outcome
-test("user can checkout with valid cart", async () => {
+```ts
+// GOOD: asserts observable outcome
+test('confirms order when payment succeeds', () => {
   // Arrange
-  const cart = createCart();
-  cart.add(product);
+  const card = validCard()
 
   // Act
-  const result = await checkout(cart, paymentMethod);
+  const result = processPayment({ amount: 100, card })
 
   // Assert
-  expect(result.status).toBe("confirmed");
-});
-```
+  expect(result.status).toBe('confirmed')
+})
 
-```typescript
-// GOOD: Interaction assertion — verifies boundary was called correctly
-// (valid when testing a unit against a mocked dependency)
-test("checkout charges the cart total", async () => {
+// BAD: asserts on internal method name — breaks if renamed even if behavior unchanged
+test('checkout calls paymentService.process', async () => {
   // Arrange
-  const mockPayment = { charge: jest.fn().mockResolvedValue({ success: true }) };
-  const checkout = new CheckoutService(mockPayment);
+  const spy = jest.spyOn(paymentService, 'process')
 
   // Act
-  await checkout.process(cart);
+  await checkout(cart, payment)
 
   // Assert
-  expect(mockPayment.charge).toHaveBeenCalledWith(cart.total);
-});
+  expect(spy).toHaveBeenCalled()
+})
 ```
 
-```typescript
-// GOOD: Verifies through interface — survives switching from SQL to any other store
-// (contrast with the bad version in Bad Tests below)
-test("createUser makes user retrievable", async () => {
+## Pattern 2 — Unit: side effect boundary
+
+Test a handler or service that triggers external calls (email, SNS, DB). Mock the boundaries — asserting the call *is* the behavior since there's no other observable outcome.
+
+```ts
+// GOOD: verifies the right boundary was called with the right contract
+test('sends confirmation email after checkout', async () => {
   // Arrange
-  const name = "Alice";
+  const emailService = { send: jest.fn() }
+  const handler = checkoutHandler({ emailService })
 
   // Act
-  const user = await createUser({ name });
+  await handler({ orderId: '123', email: 'alice@example.com' })
 
   // Assert
-  const retrieved = await getUser(user.id);
-  expect(retrieved.name).toBe(name);
-});
+  expect(emailService.send).toHaveBeenCalledWith({
+    to: 'alice@example.com',
+    template: 'order-confirmation',
+    orderId: '123'
+  })
+})
+
+// BAD: asserts on an internal method instead of the boundary call itself.
+//      If you inline buildEmailPayload() or rename it, this test breaks
+//      even though the email sent to the user is exactly the same.
+test('checkout builds email payload', async () => {
+  // Arrange
+  const spy = jest.spyOn(emailBuilder, 'buildEmailPayload')
+
+  // Act
+  await checkoutHandler({ orderId: '123', email: 'alice@example.com' })
+
+  // Assert
+  expect(spy).toHaveBeenCalled()
+})
 ```
 
-Characteristics:
+## Pattern 3 — Integration: real outcome
 
-- Tests behavior users/callers care about
-- Describes WHAT, not HOW
-- One logical assertion per test
+No mocks. Assert on actual state through the public interface. Requires real infra (DB container, HTTP server).
 
-## Bad Tests
+```ts
+// GOOD: verifies through interface — survives switching storage implementation
+test('createUser makes user retrievable', async () => {
+  // Arrange
+  const name = 'Alice'
 
-**Implementation-detail tests**: Coupled to internal structure.
+  // Act
+  const user = await createUser({ name })
 
-```typescript
-// BAD: Asserts on internal method name — breaks if you rename process() to charge()
-//      even though checkout behavior is unchanged
-test("checkout calls paymentService.process", async () => {
-  const spy = jest.spyOn(paymentService, 'process');
-  await checkout(cart, payment);
-  expect(spy).toHaveBeenCalled();
-});
+  // Assert
+  const retrieved = await getUser(user.id)
+  expect(retrieved.name).toBe(name)
+})
+
+// BAD: bypasses interface to verify — couples test to storage implementation
+test('createUser saves to database', async () => {
+  // Arrange
+  const name = 'Alice'
+
+  // Act
+  await createUser({ name })
+
+  // Assert
+  const row = await db.query('SELECT * FROM users WHERE name = ?', [name])
+  expect(row).toBeDefined()
+})
 ```
-
-```typescript
-// BAD: Bypasses interface to verify — couples test to storage implementation
-// (see the good version in Good Tests above)
-test("createUser saves to database", async () => {
-  await createUser({ name: "Alice" });
-  const row = await db.query("SELECT * FROM users WHERE name = ?", ["Alice"]);
-  expect(row).toBeDefined();
-});
-```
-
-Red flags:
-
-- Testing private methods
-- Test name describes HOW not WHAT
-- Verifying through external means instead of interface
