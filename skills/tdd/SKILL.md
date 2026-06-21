@@ -11,8 +11,6 @@ description: Test-driven development with red-green-refactor loop. Use when user
 
 Use real collaborators by default. Mock when the real collaborator is a liability — slow, has side effects, non-deterministic, or already well-tested elsewhere. Always mock at system boundaries (external HTTP, DB, clock, filesystem).
 
-**Bad tests**: testing private methods, mocking internal collaborators that live inside your own system, or mocking so heavily that tests mirror implementation structure. The warning sign: your test breaks when you refactor but behavior hasn't changed.
-
 See [tests.md](tests.md) for examples and test patterns. See [mocking.md](mocking.md) for mocking guidelines.
 
 ## Anti-Pattern: Horizontal Slices
