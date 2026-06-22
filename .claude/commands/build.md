@@ -43,7 +43,7 @@ Run all checks before Setup. If any fail, stop and ask the user how to proceed.
 
 ## Phase 1 — Understand & Plan
 
-Follow the `plan` skill. Pass the Jira ticket and any reference ticket/PR as context.
+Follow the `make-plan` skill. Pass the Jira ticket and any reference ticket/PR as context.
 
 **Approval gate**: stop and wait for user approval of the plan before starting Phase 2.
 

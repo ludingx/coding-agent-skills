@@ -1,5 +1,5 @@
 ---
-name: plan
+name: make-plan
 description: Analyse a task and produce a concise implementation plan. Use when the user wants to understand what needs to change before writing any code. Works with or without a Jira ticket.
 ---
 
