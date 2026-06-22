@@ -43,17 +43,7 @@ Run all checks before Setup. If any fail, stop and ask the user how to proceed.
 
 ## Phase 1 — Understand & Plan
 
-- Analyse the ticket requirements and acceptance criteria.
-- Identify files, modules, and interfaces that will need to change.
-- If a reference ticket/PR was provided, use it for pattern guidance — prefer the same patterns over inventing new ones.
-- Write a concise implementation plan covering: what changes, where, and why.
-- State any assumptions explicitly. Stop and ask if anything is ambiguous.
-
-Output: `.claude/plan/<TICKET-ID>-phase1-plan.md`. Structure:
-1. **Ticket** — ID, URL, summary.
-2. **Requirements** — description and acceptance criteria verbatim (pin the source of truth; later phases refer back here if context is compacted).
-3. **Assumptions** — anything inferred rather than stated.
-4. **Plan** — files to change, patterns to follow, and why.
+Follow the `plan` skill. Pass the Jira ticket and any reference ticket/PR as context.
 
 **Approval gate**: stop and wait for user approval of the plan before starting Phase 2.
 

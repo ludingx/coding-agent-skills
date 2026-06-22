@@ -10,6 +10,7 @@ Skills live in `skills/<name>/SKILL.md`. When a user request matches a skill's i
 |---|---|
 | `surgical-changes` | Implementing a feature, fixing a bug, editing an existing codebase |
 | `tdd` | Building with tests, red-green-refactor, test-first development |
+| `plan` | Understanding requirements and producing an implementation plan before any code is written |
 
 ## Commands
 
@@ -18,3 +19,4 @@ Slash commands live in `.claude/commands/`. They are user-invoked entry points t
 | Command | Purpose |
 |---|---|
 | `/build` | Deliver a Jira ticket end-to-end: plan → TDD → PR → CI |
+| `/plan` | Analyse a task and produce an implementation plan (Jira ticket optional) |
