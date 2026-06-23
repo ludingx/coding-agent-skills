@@ -36,7 +36,7 @@ Run all checks before Setup. If any fail, stop and ask the user how to proceed.
 2. If a reference ticket/PR was provided, fetch both and note the patterns used.
 3. Pull latest from main: `git fetch origin && git merge --ff-only origin/main` (run from the repo root). If the merge fails, stop and ask the user to resolve before continuing.
 4. Use the ticket ID (lowercased) as the branch name (e.g. `ncpp-91`).
-5. Create the worktree with the git CLI first so the branch name has no `worktree-` prefix: `git worktree add -b <branch-name> .claude/worktrees/<branch-name> origin/main` (from the repo root). Then call the `EnterWorktree` tool with `path: .claude/worktrees/<branch-name>` to switch the session into that worktree.
+5. Follow the `using-git-worktrees` skill to create an isolated workspace on the branch from step 4.
 6. All subsequent work happens inside that worktree. At the start of Phase 3, use `ExitWorktree` with `action: "keep"` so the branch persists for PR creation.
 
 ---
