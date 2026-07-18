@@ -28,17 +28,60 @@ Test-driven development using vertical slices (tracer bullets). One failing test
 ### /build (Claude Code)
 End-to-end workflow for delivering a Jira ticket: fetch ticket → plan → TDD implementation → raise PR → monitor CI → cleanup.
 
-## Installation
+## Setup
 
-### Claude Code
-```bash
-git clone https://github.com/ludingx/software-agent-skills.git
-cd software-agent-skills
-claude --plugin-dir .
+Marketplace install:
+
+```
+/plugin marketplace add ludingx/coding-agent-skills
+/plugin install coding-agent-skills@coding-agent-skills
 ```
 
-Or add to your project's `CLAUDE.md`:
+Local / development install:
+
 ```
-Use skills from: https://github.com/ludingx/software-agent-skills
+git clone git@github.com:ludingx/coding-agent-skills.git
+claude --plugin-dir /path/to/coding-agent-skills
 ```
+
+## Staying up to date
+
+This is a third-party marketplace, so Claude Code does not auto-update it by default. The plugin tracks `ref: main` with no pinned sha, so every commit on main is treated as a new version — but you still need auto-update enabled for the marketplace to pick those up automatically.
+
+**Option 1 — Enable auto-update (one-time):**
+
+```
+/plugin
+```
+
+Then go to the **Marketplaces** tab, select `coding-agent-skills`, and enable auto-update.
+
+**Option 2 — Env var override:**
+
+```
+export FORCE_AUTOUPDATE_PLUGINS=1
+```
+
+**Option 3 — Via managed settings:**
+
+Add to a managed `settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "coding-agent-skills": {
+      "source": { "source": "github", "repo": "ludingx/coding-agent-skills" },
+      "autoUpdate": true
+    }
+  }
+}
+```
+
+**Manual update (always works):**
+
+```
+/plugin update coding-agent-skills
+```
+
+A restart is required for the update to take effect.
 
