@@ -1,0 +1,3 @@
+- [ ] PR Title describes a summary of the changes
+- [ ] Tests have been written to cover the changes
+- [ ] Documentation has been updated if necessary

@@ -1,0 +1,10 @@
+{
+  "name": "coding-agent-skills",
+  "description": "Reusable skills and commands for AI coding agents.",
+  "author": {
+    "name": "David Lu"
+  },
+  "repository": "https://github.com/ludingx/coding-agent-skills",
+  "commands": ["./.claude/commands", "./commands"],
+  "skills": "./skills"
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "coding-agent-skills",
+  "description": "Reusable skills and commands for AI coding agents.",
+  "owner": {
+    "name": "David Lu",
+    "url": "https://github.com/ludingx"
+  },
+  "plugins": [
+    {
+      "name": "coding-agent-skills",
+      "description": "Reusable skills and commands for AI coding agents.",
+      "author": {
+        "name": "David Lu"
+      },
+      "category": "development",
+      "source": {
+        "source": "url",
+        "url": "git@github.com:ludingx/coding-agent-skills.git",
+        "ref": "main"
+      },
+      "homepage": "https://github.com/ludingx/coding-agent-skills"
+    }
+  ]
+}
