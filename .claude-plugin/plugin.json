@@ -5,6 +5,6 @@
     "name": "David Lu"
   },
   "repository": "https://github.com/ludingx/coding-agent-skills",
-  "commands": ["./.claude/commands", "./commands"],
+  "commands": "./.claude/commands",
   "skills": "./skills"
 }
