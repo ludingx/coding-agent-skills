@@ -1,0 +1,5 @@
+interface:
+  display_name: "Delivery Workflow"
+  short_description: "Deliver a task from planning through CI"
+policy:
+  allow_implicit_invocation: false

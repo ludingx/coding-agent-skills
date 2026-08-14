@@ -1,31 +1,29 @@
 ---
 name: make-plan
-description: Analyse a task and produce a concise implementation plan. Use when the user wants to understand what needs to change before writing any code. Works with or without a Jira ticket.
+description: Think through a task deeply, then produce a concise implementation plan. Use when the user wants to understand what needs to change before writing any code. Works with or without a Jira ticket. Agents must invoke this skill whenever the user mentions "plan", "make a plan", "create a plan", or any similar intent to plan before implementation.
 ---
 
-# Understand & Plan
+# Make Plan
 
 ## Input
 
-- **Jira ticket** (optional) — URL or ID. If provided, fetch the ticket via Atlassian MCP: summary, description, acceptance criteria, comments, and any linked issues or attachments that clarify scope. If the description references a design doc, Confluence page, or another ticket, fetch those too.
-- **Reference ticket/PR** (optional) — fetch and note the patterns used; prefer them over inventing new ones.
-- If no ticket is provided, work from the user's description of the task instead.
+Jira ticket or user description. Fetch any linked docs, reference PRs, or Confluence pages.
 
 ## Process
 
-1. Analyse the requirements and acceptance criteria (or user description).
-2. Identify files, modules, and interfaces that will need to change.
-3. If a reference ticket/PR was provided, surface the patterns to follow.
-4. Write a concise implementation plan: what changes, where, and why.
-5. State assumptions explicitly. Stop and ask if anything is ambiguous before producing the plan.
+1. **Explore** — read the codebase, domain docs, and ADRs before forming opinions.
+2. **Think** — work through these internally before writing anything:
+   - What problem is actually being solved? Is the stated solution the right one?
+   - What edge cases and failure modes exist?
+   - What existing modules/interfaces does this touch?
+   - Where should the seam be?
+   - What could go wrong with the obvious approach?
+   - What is out of scope?
+   - How will this be tested?
 
-## Output
+   Surface genuine blockers to the user one at a time.
+3. **Write** — produce the plan at `.claude/plan/<TICKET-ID>-plan.md`. If no ticket exists, use a short kebab-case slug of the task (e.g. `.claude/plan/add-payment-retry-plan.md`). Wait for approval.
 
-Write the plan to `.claude/plan/<TICKET-ID>-phase1-plan.md` (use a short slug if no ticket ID is available). Structure:
+## Output format
 
-1. **Ticket** — ID, URL, and summary (or task description if no ticket).
-2. **Requirements** — description and acceptance criteria verbatim (pin the source of truth; later phases refer back here if context is compacted).
-3. **Assumptions** — anything inferred rather than stated.
-4. **Plan** — files to change, patterns to follow, and why.
-
-Stop and wait for user approval of the plan before any implementation begins.
+Problem / Solution / Assumptions / Implementation decisions / Testing / Out of scope / Tickets (optional)

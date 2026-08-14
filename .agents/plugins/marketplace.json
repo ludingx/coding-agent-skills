@@ -1,0 +1,20 @@
+{
+  "name": "coding-agent-skills",
+  "interface": {
+    "displayName": "Coding Agent Skills"
+  },
+  "plugins": [
+    {
+      "name": "coding-agent-skills",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
