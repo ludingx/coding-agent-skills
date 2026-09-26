@@ -22,7 +22,7 @@ Jira ticket or user description. Fetch any linked docs, reference PRs, or Conflu
    - How will this be tested?
 
    Surface genuine blockers to the user one at a time.
-3. **Write** — produce the plan at `.claude/plan/<TICKET-ID>-plan.md`. If no ticket exists, use a short kebab-case slug of the task (e.g. `.claude/plan/add-payment-retry-plan.md`). Wait for approval.
+3. **Write** — produce the plan at `.claude/plans/<TICKET-ID>-plan.md`. If no ticket exists, use a short kebab-case slug of the task (e.g. `.claude/plans/add-payment-retry-plan.md`). Wait for approval.
 
 ## Output format
 

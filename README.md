@@ -1,90 +1,74 @@
 # coding-agent-skills
 
-Reusable skills and commands for AI coding agents.
+Reusable skills for AI coding agents, supporting general software engineering work—from clarifying requirements and planning through implementation, review, and delivery.
 
-## Claude Code
+## Installation
+
+These skills work with Claude Code, OpenCode, and Codex.
+
+<details>
+<summary><strong>Claude Code</strong></summary>
 
 Marketplace install:
 
-```
+```text
 /plugin marketplace add ludingx/coding-agent-skills
 /plugin install coding-agent-skills@coding-agent-skills
 ```
 
 Local / development install:
 
-```
+```bash
 git clone git@github.com:ludingx/coding-agent-skills.git
 claude --plugin-dir /path/to/coding-agent-skills
 ```
 
 ### Staying up to date
 
-This is a third-party marketplace, so Claude Code does not auto-update it by default. The plugin tracks `ref: main` with no pinned sha, so every commit on main is treated as a new version — but you still need auto-update enabled for the marketplace to pick those up automatically.
+Claude Code does not automatically update third-party marketplaces by default. Enable auto-update from the `/plugin` command's **Marketplaces** tab, or configure the marketplace in managed settings. You can also update manually:
 
-**Option 1 — Enable auto-update (one-time):**
-
-```
-/plugin
-```
-
-Then go to the **Marketplaces** tab, select `coding-agent-skills`, and enable auto-update.
-
-**Option 2 — Env var override:**
-
-```
-export FORCE_AUTOUPDATE_PLUGINS=1
-```
-
-**Option 3 — Via managed settings:**
-
-Add to a managed `settings.json`:
-
-```json
-{
-  "extraKnownMarketplaces": {
-    "coding-agent-skills": {
-      "source": { "source": "github", "repo": "ludingx/coding-agent-skills" },
-      "autoUpdate": true
-    }
-  }
-}
-```
-
-**Manual update:**
-
-```
+```text
 /plugin update coding-agent-skills
 ```
 
-A restart is required for the update to take effect.
+Restart Claude Code for updates to take effect.
 
-## OpenCode
+</details>
+
+<details>
+<summary><strong>OpenCode</strong></summary>
 
 After cloning this repository, add its skills to the global OpenCode config at
-`~/.config/opencode/opencode.json`. Replace `{absolute_path}` with the output
-of `realpath /path/to/coding-agent-skills`:
+`~/.config/opencode/opencode.json`. Replace `{repo_absolute_path}` with the absolute
+path to this repository:
 
 ```json
 {
   "skills": {
     "paths": [
-      "{absolute_path}/skills"
+      "{repo_absolute_path}/skills"
     ]
   }
 }
 ```
 
-### Invoking Skills
+### Staying up to date
 
-Skills are not available as slash commands in OpenCode. To invoke a skill:
+Pull the latest changes in the cloned repository:
 
-- **Option 1** — Type `/skills` to browse and select a skill from the list
-- **Option 2** — Mention it directly in chat, e.g. `use the make-plan skill for this task`
+```bash
+cd /path/to/coding-agent-skills
+git pull origin main
+```
 
-This repository does not currently include OpenCode-specific command files; use the skills path above to load its workflows.
+### Invoking skills
 
-## Codex
+Skills are not slash commands in OpenCode. Browse available skills with `/skills`, or mention a skill directly in your prompt, for example: `use the make-plan skill`.
+
+</details>
+
+<details>
+<summary><strong>Codex</strong></summary>
 
 Marketplace install:
 
@@ -93,13 +77,11 @@ codex plugin marketplace add ludingx/coding-agent-skills
 codex plugin add coding-agent-skills@coding-agent-skills
 ```
 
-Start a new Codex session before using the installed skills. You can also use
-`/plugins` to browse, install, or uninstall marketplace plugins interactively.
+Start a new Codex session before using installed or updated skills. Use `/plugins` to browse and manage plugins.
 
-### Invoking Skills
+### Invoking skills
 
-To invoke a skill deliberately, reference it with `$` in your prompt. For
-example:
+Reference a skill with `$` in your prompt, for example:
 
 ```text
 $make-plan Plan this change.
@@ -113,36 +95,39 @@ Refresh the marketplace to retrieve the latest version from `main`:
 codex plugin marketplace upgrade coding-agent-skills
 ```
 
-After upgrading, start a new Codex session before using updated skills.
+</details>
 
-## Workflow
+## Skills
 
-The skills are designed to be used in sequence. A typical feature or bug fix flows like this:
+The skills support different stages of software engineering work. Use the ones that fit the task; they do not require adopting a new process.
 
-### 1. Plan — `/make-plan`
+### User-invoked skills
 
-Start here. Give it a task description or ticket. The model explores the codebase, thinks through the problem, and writes a plan to `.claude/plan/`.
+- [`make-plan`](./skills/make-plan/SKILL.md): Explore a task and produce a concise implementation plan.
+- [`grilling`](./skills/grilling/SKILL.md): Stress-test a plan, decision, or idea by surfacing assumptions and edge cases.
+- [`grill-with-docs`](./skills/grill-with-docs/SKILL.md): Sharpen a plan and capture decisions in project documentation.
+- [`implement`](./skills/implement/SKILL.md): Implement work from an approved plan or specification.
+- [`delivery-workflow`](./skills/delivery-workflow/SKILL.md): Guide work from planning through implementation, pull request, CI, and cleanup.
+- [`code-review`](./skills/code-review/SKILL.md): Review changes against coding standards and the original requirements.
+- [`research`](./skills/research/SKILL.md): Investigate a topic using high-trust sources and capture findings.
+- [`prototype`](./skills/prototype/SKILL.md): Build a throwaway prototype to explore a design question.
+- [`to-spec`](./skills/to-spec/SKILL.md): Turn a discussion into a specification.
+- [`to-tickets`](./skills/to-tickets/SKILL.md): Break work into implementation tickets.
 
-### 2. Stress-test — `/grill-with-docs`
+### Model-invoked skills
 
-Optional but recommended for anything non-trivial. Run this after reviewing the plan to challenge assumptions, surface edge cases, and sharpen domain language. Updates ADRs and the glossary as decisions land.
+- [`using-git-worktrees`](./skills/using-git-worktrees/SKILL.md): Set up an isolated worktree for feature work.
+- [`domain-modeling`](./skills/domain-modeling/SKILL.md): Clarify domain terminology and record architectural decisions.
+- [`handoff`](./skills/handoff/SKILL.md): Prepare a concise handoff for another agent.
+- [`tdd`](./skills/tdd/SKILL.md): Follow a test-driven development workflow.
 
-### 3. Implement — `/implement`
+## Suggested workflow
 
-Execute the approved plan. Follows surgical and simplicity constraints automatically. Uses `/tdd` at pre-agreed seams for new behaviour.
+For a feature or bug fix, a typical flow is:
 
-### 4. Review — `/code-review`
+1. **Plan** — Use [`make-plan`](./skills/make-plan/SKILL.md) to understand the task and outline the work.
+2. **Align** — Optionally use [`grilling`](./skills/grilling/SKILL.md) or [`grill-with-docs`](./skills/grill-with-docs/SKILL.md) to challenge assumptions and clarify scope.
+3. **Implement** — Use [`implement`](./skills/implement/SKILL.md) to carry out the approved plan.
+4. **Review** — Use [`code-review`](./skills/code-review/SKILL.md) to check the changes against project standards and requirements.
 
-Run before raising a PR. Reviews against both coding standards and the original spec.
-
----
-
-Other skills available when needed:
-
-| Skill | When to use |
-|---|---|
-| `/grilling` | Stress-test a decision interactively |
-| `/domain-modeling` | Capture or refine domain terminology |
-| `/using-git-worktrees` | Isolate feature work from your current workspace |
-| `/handoff` | Hand context to another agent or session |
-| `/delivery-workflow` | Follow the end-to-end delivery workflow |
+Use other skills as appropriate for the task, such as [`research`](./skills/research/SKILL.md), [`domain-modeling`](./skills/domain-modeling/SKILL.md), [`using-git-worktrees`](./skills/using-git-worktrees/SKILL.md), or [`handoff`](./skills/handoff/SKILL.md).
