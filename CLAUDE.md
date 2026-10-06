@@ -12,11 +12,3 @@ Skills live in `skills/<name>/SKILL.md`. When a user request matches a skill's i
 | `tdd` | Building with tests, red-green-refactor, test-first development |
 | `make-plan` | Understanding requirements and producing an implementation plan before any code is written |
 | `using-git-worktrees` | Starting feature work that needs isolation, or before executing implementation plans |
-
-## Commands
-
-Slash commands live in `.claude/commands/`. They are user-invoked entry points that orchestrate skills into end-to-end workflows.
-
-| Command | Purpose |
-|---|---|
-| `/build` | Deliver a Jira ticket end-to-end: plan → TDD → PR → CI |
