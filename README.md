@@ -63,7 +63,7 @@ git pull origin main
 
 ### Invoking skills
 
-Skills are not slash commands in OpenCode. Browse available skills with `/skills`, or mention a skill directly in your prompt, for example: `use the make-plan skill`.
+Skills are not slash commands in OpenCode. Browse available skills with `/skills`, or mention a skill directly in your prompt, for example: `use the grilling skill`.
 
 </details>
 
@@ -84,7 +84,7 @@ Start a new Codex session before using installed or updated skills. Use `/plugin
 Reference a skill with `$` in your prompt, for example:
 
 ```text
-$make-plan Plan this change.
+$grilling Stress-test this plan.
 ```
 
 ### Staying up to date
@@ -103,12 +103,10 @@ The skills support different stages of software engineering work. Use the ones t
 
 ### User-invoked skills
 
-- [`make-plan`](./skills/make-plan/SKILL.md): Explore a task and produce a concise implementation plan.
+- [`dl-mode`](./skills/dl-mode/SKILL.md): Route a request to a playbook (build a feature, fix a bug, babysit a PR) with shared rules for verified, root-cause work.
 - [`grilling`](./skills/grilling/SKILL.md): Stress-test a plan, decision, or idea by surfacing assumptions and edge cases.
 - [`grill-with-docs`](./skills/grill-with-docs/SKILL.md): Sharpen a plan and capture decisions in project documentation.
 - [`implement`](./skills/implement/SKILL.md): Implement work from an approved plan or specification.
-- [`delivery-workflow`](./skills/delivery-workflow/SKILL.md): Guide work from planning through implementation, pull request, CI, and cleanup.
-- [`code-review`](./skills/code-review/SKILL.md): Review changes against coding standards and the original requirements.
 - [`research`](./skills/research/SKILL.md): Investigate a topic using high-trust sources and capture findings.
 - [`prototype`](./skills/prototype/SKILL.md): Build a throwaway prototype to explore a design question.
 - [`to-spec`](./skills/to-spec/SKILL.md): Turn a discussion into a specification.
@@ -127,9 +125,7 @@ The skills support different stages of software engineering work. Use the ones t
 
 For a feature or bug fix, a typical flow is:
 
-1. **Plan** — Use [`make-plan`](./skills/make-plan/SKILL.md) to understand the task and outline the work.
-2. **Align** — Optionally use [`grilling`](./skills/grilling/SKILL.md) or [`grill-with-docs`](./skills/grill-with-docs/SKILL.md) to challenge assumptions and clarify scope.
-3. **Implement** — Use [`implement`](./skills/implement/SKILL.md) to carry out the approved plan.
-4. **Review** — Use [`code-review`](./skills/code-review/SKILL.md) to check the changes against project standards and requirements.
+1. **Align** — Optionally use [`grilling`](./skills/grilling/SKILL.md) or [`grill-with-docs`](./skills/grill-with-docs/SKILL.md) to challenge assumptions and clarify scope.
+2. **Implement** — Use [`implement`](./skills/implement/SKILL.md) to carry out the approved plan.
 
 Use other skills as appropriate for the task, such as [`research`](./skills/research/SKILL.md), [`domain-modeling`](./skills/domain-modeling/SKILL.md), [`using-git-worktrees`](./skills/using-git-worktrees/SKILL.md), or [`handoff`](./skills/handoff/SKILL.md).

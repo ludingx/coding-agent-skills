@@ -35,4 +35,4 @@ Ask: "What's the public interface, and which seams should we test?"
 
 - **Red before green.** Write the failing test first, then only enough code to pass it. Don't anticipate future tests or add speculative features.
 - **One slice at a time.** One seam, one test, one minimal implementation per cycle.
-- **Refactoring is not part of the loop.** Once all tests pass, use the `code-review` skill to review for code smells and standards compliance. Refactor only on green, after the loop is complete.
+- **Refactoring is not part of the loop.** Once all tests pass, review for code smells and standards compliance. Refactor only on green, after the loop is complete.

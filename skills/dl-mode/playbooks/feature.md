@@ -1,12 +1,6 @@
----
-name: build-feature
-description: Build a new or changed product capability with a small, reviewable diff and evidence from tests and the running app. Use for feature work, including feature-flagged changes; not for pure refactors or investigations.
-disable-model-invocation: true
----
+# Feature
 
-# Build feature
-
-Own the feature from code to verification. Do not invoke `make-plan`, `implement`, or `tdd` as a prerequisite. Use tests to learn and prove behavior, not to satisfy a prescribed ceremony.
+Own the feature from code to verification. Do not invoke `implement` or `tdd` as a prerequisite. Use tests to learn and prove behavior, not to satisfy a prescribed ceremony.
 
 1. **Ground the change.** Find the user-facing path, its owner, existing behavior, applicable repository guidance, and available app-running instructions. Nearby code is evidence, not automatically a good pattern; distinguish stable interfaces and conventions from incidental legacy workarounds. If a product decision or the intended behavior is genuinely unclear, ask rather than inventing it.
 2. **Choose the boundary.** State briefly what changes for users, what must remain unchanged, and where the smallest clear branch belongs. If behind a feature flag, identify the flag's existing convention and explicitly preserve the flag-off path. Do not move or rewrite the old path merely to add the new one. If a broad preparatory change is unavoidable, explain why and keep it separately reviewable where possible.
