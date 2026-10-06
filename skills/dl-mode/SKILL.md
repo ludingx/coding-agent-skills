@@ -14,7 +14,6 @@ Match a playbook first. Copy its steps into a todo list before any bespoke plan.
 
 Triggers:
 
-- Any edit to an existing codebase → the **surgical-changes** skill.
 - Building with tests → the **tdd** skill when test-first is practical. It is an option, not a gate.
 - Before commit → the **deslop** skill.
 - Before review → the **no-comments** skill.
@@ -27,10 +26,17 @@ Triggers:
 
 ## Principles
 
-Read the leaf skill in full for any principle you apply.
+Read the leaf skill in full for any principle you apply. Each entry names when it applies.
 
-- **Fix Root Causes** (**principle-fix-root-causes**). Any failure: the reported bug, a red test, a type error, a crash, a flaky check. Trace to the mechanism and fix it there, not at the symptom.
-- **Prove It Works** (**principle-prove-it-works**). Before declaring anything done. Check the real artifact, not a proxy. What you could not check is **not verified**.
+**Core**
+
+- **Laziness Protocol** (**principle-laziness-protocol**). Refactoring, sizing a diff, or tempted to add abstractions, layers, or signal threading. Bias to deletion and the smallest change that solves the problem.
+- **Subtract Before You Add** (**principle-subtract-before-you-add**). Sequencing an addition, refactor, or rewrite. Remove dead weight first, then build on the simpler base.
+
+**Verification**
+
+- **Prove It Works** (**principle-prove-it-works**). After a task, before declaring done. Verify against the real artifact, not a proxy or "it compiles".
+- **Fix Root Causes** (**principle-fix-root-causes**). Debugging. Trace each symptom to its root cause, reproduce first, ask why until you reach it.
 
 ## Autonomy
 

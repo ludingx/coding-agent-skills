@@ -106,7 +106,6 @@ The skills support different stages of software engineering work. Use the ones t
 - [`dl-mode`](./skills/dl-mode/SKILL.md): Route a request to a playbook (build a feature, fix a bug, babysit a PR) with shared rules for verified, root-cause work.
 - [`grilling`](./skills/grilling/SKILL.md): Stress-test a plan, decision, or idea by surfacing assumptions and edge cases.
 - [`grill-with-docs`](./skills/grill-with-docs/SKILL.md): Sharpen a plan and capture decisions in project documentation.
-- [`implement`](./skills/implement/SKILL.md): Implement work from an approved plan or specification.
 - [`research`](./skills/research/SKILL.md): Investigate a topic using high-trust sources and capture findings.
 - [`prototype`](./skills/prototype/SKILL.md): Build a throwaway prototype to explore a design question.
 - [`to-spec`](./skills/to-spec/SKILL.md): Turn a discussion into a specification.
@@ -126,6 +125,6 @@ The skills support different stages of software engineering work. Use the ones t
 For a feature or bug fix, a typical flow is:
 
 1. **Align** — Optionally use [`grilling`](./skills/grilling/SKILL.md) or [`grill-with-docs`](./skills/grill-with-docs/SKILL.md) to challenge assumptions and clarify scope.
-2. **Implement** — Use [`implement`](./skills/implement/SKILL.md) to carry out the approved plan.
+2. **Build** — Use [`dl-mode`](./skills/dl-mode/SKILL.md) to build the feature or fix the bug, open the PR, and babysit it until it is ready for human approval.
 
 Use other skills as appropriate for the task, such as [`research`](./skills/research/SKILL.md), [`domain-modeling`](./skills/domain-modeling/SKILL.md), [`using-git-worktrees`](./skills/using-git-worktrees/SKILL.md), or [`handoff`](./skills/handoff/SKILL.md).
