@@ -112,6 +112,7 @@ The skills support different stages of software engineering work. Use the ones t
 - [`to-tickets`](./skills/to-tickets/SKILL.md): Break work into implementation tickets.
 - [`bro`](./skills/bro/SKILL.md): Restate the last message in plain language, without jargon.
 - [`unslop`](./skills/unslop/SKILL.md): Cut AI writing patterns and jargon from text.
+- [`reflect`](./skills/reflect/SKILL.md): Review the session transcript with three parallel reviewers and turn durable learnings into skill edits you approve.
 
 ### Model-invoked skills
 
