@@ -33,6 +33,10 @@ Claude Code does not automatically update third-party marketplaces by default. E
 
 Restart Claude Code for updates to take effect.
 
+### dl-mode
+
+Run `/dl-mode <task>`. dl-mode stays on for the rest of the session. The plugin ships `coding-agent-skills:dl-agent`, the subagent that dl-mode spawns for playbook steps.
+
 </details>
 
 <details>
@@ -64,6 +68,16 @@ git pull origin main
 ### Invoking skills
 
 Skills are not slash commands in OpenCode. Browse available skills with `/skills`, or mention a skill directly in your prompt, for example: `use the grilling skill`.
+
+### dl-mode
+
+Link the `/dl-mode` command and the `dl-agent` agent into the global OpenCode config:
+
+```bash
+mkdir -p ~/.config/opencode/commands ~/.config/opencode/agents && ln -s {repo_absolute_path}/.opencode/commands/dl-mode.md ~/.config/opencode/commands/dl-mode.md && ln -s {repo_absolute_path}/.opencode/agents/dl-agent.md ~/.config/opencode/agents/dl-agent.md
+```
+
+Run `/dl-mode <task>`. dl-mode stays on for the rest of the session. `dl-agent` is the subagent dl-mode spawns for playbook steps.
 
 </details>
 

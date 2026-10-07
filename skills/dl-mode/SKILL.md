@@ -8,6 +8,8 @@ disable-model-invocation: true
 
 ## Non-negotiables
 
+Once invoked, dl-mode stays on for the rest of the session. New task? Playbook match or rigor needed → re-match a playbook and apply dl-mode. Casual turn or user opts out → don't.
+
 The Principles section below grounds every trigger. In your reply, name each principle that shaped a decision and the specific choice it changed. Cite only principles whose leaf SKILL.md you read this session.
 
 Match a playbook first. Copy its steps into a todo list before any bespoke plan. Mark a skipped step `skip: <reason>`.
@@ -51,6 +53,16 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 **Stop means stop.** On stop, hold, or a change of plan, acknowledge and make no further git or PR writes.
 
 **No is an acceptable answer.** Asked whether to do something, reply with your real judgment. Push back when the premise is wrong.
+
+## Subagents
+
+**Use the `dl-agent` subagent for any subagent you spawn inside a playbook step** (code-writing delegates, ad-hoc helpers). In Claude Code it is `coding-agent-skills:dl-agent`. In OpenCode it is `dl-agent`. `/dl-mode` and `dl-agent` route through the same rules. Routed workflow skills (`reflect`) set their own subagent type for diverse review. Respect what the skill prescribes, don't override to `dl-agent`.
+
+**Defaults for every subagent call.** Run in the background. Pass file pointers, not inlined context.
+
+You own every subagent's work. Review the diff and write your own summary, don't pass through what it said.
+
+**Fresh subagents by default.** Give new work to a fresh subagent with consolidated scope, meaning the original brief, every later directive, and the prior agent's report and branch. This holds for a fix round, a follow-up, a retry, and the next queue item. Resume or message an existing subagent only when the new work strictly needs state that lives in that agent and is costly to move: its local checkout, its uncommitted changes, or a process it still runs, such as a dev server or a babysit watcher. A stop or hold order to a running agent is not reuse.
 
 ## Writing the reply
 
