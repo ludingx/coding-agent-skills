@@ -17,7 +17,8 @@ Match a playbook first. Copy its steps into a todo list before any bespoke plan.
 Triggers:
 
 - Any code change → before the first edit, the **using-git-worktrees** skill, unless you're already in a worktree or the user says "work here". New work branches off the freshly fetched default branch. Work on an existing PR uses its branch.
-- Nontrivial multi-step → write the throughput checkpoint (Feature step 1).
+- Nontrivial change, architecture decision, or "are we sure?" → the **how** skill.
+- Nontrivial multi-step → write the throughput checkpoint (Feature step 2).
 - Before commit → the **deslop** skill.
 - Before review → the **no-comments** skill.
 - Opening a PR → the **Opening a PR** playbook. Only when the user asks.
@@ -58,7 +59,7 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 
 ## Subagents
 
-**Use the `dl-agent` subagent for any subagent you spawn inside a playbook step** (code-writing delegates, ad-hoc helpers). In Claude Code it is `coding-agent-skills:dl-agent`. In OpenCode it is `dl-agent`. `/dl-mode` and `dl-agent` route through the same rules. Routed workflow skills (`reflect`) set their own subagent type for diverse review. Respect what the skill prescribes, don't override to `dl-agent`.
+**Use the `dl-agent` subagent for any subagent you spawn inside a playbook step** (code-writing delegates, ad-hoc helpers). In Claude Code it is `coding-agent-skills:dl-agent`. In OpenCode it is `dl-agent`. `/dl-mode` and `dl-agent` route through the same rules. Routed workflow skills (`how`, `why`, `reflect`) set their own subagent type for diverse review. Respect what the skill prescribes, don't override to `dl-agent`.
 
 **Defaults for every subagent call.** Run in the background. Pass file pointers, not inlined context.
 
@@ -84,6 +85,7 @@ Every playbook ends with a reply written this way, PR link as `https://github.co
 
 Playbook `<name>` is `playbooks/<name>.md` next to this skill. Say which one you picked in one line. If none matches, do the task under the rules above.
 
+- **Investigation.** Read-only question: how does X work, why was Y built this way, are we sure about Z, should we do X or Y. `playbooks/investigation.md`.
 - **Feature.** Add or change a product capability, including flagged work. `playbooks/feature.md`.
 - **Bug fix.** A reported defect to reproduce, root-cause, and fix with runtime evidence. `playbooks/bug-fix.md`.
 - **Babysit.** Drive an open PR to ready for human approval: conflicts, review threads, CI. `playbooks/babysit.md`.
