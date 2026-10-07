@@ -127,13 +127,13 @@ The skills support different stages of software engineering work. Use the ones t
 - [`bro`](./skills/bro/SKILL.md): Restate the last message in plain language, without jargon.
 - [`unslop`](./skills/unslop/SKILL.md): Cut AI writing patterns and jargon from text.
 - [`reflect`](./skills/reflect/SKILL.md): Review the session transcript with three parallel reviewers and turn durable learnings into skill edits you approve.
+- [`tdd`](./skills/tdd/SKILL.md): Write a failing regression test before fixing a bug, when the test path is clear and cheap.
 
 ### Model-invoked skills
 
 - [`using-git-worktrees`](./skills/using-git-worktrees/SKILL.md): Set up an isolated worktree for feature work.
 - [`domain-modeling`](./skills/domain-modeling/SKILL.md): Clarify domain terminology and record architectural decisions.
 - [`handoff`](./skills/handoff/SKILL.md): Prepare a concise handoff for another agent.
-- [`tdd`](./skills/tdd/SKILL.md): Follow a test-driven development workflow.
 
 ## Suggested workflow
 

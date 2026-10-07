@@ -16,7 +16,7 @@ Match a playbook first. Copy its steps into a todo list before any bespoke plan.
 
 Triggers:
 
-- Building with tests → the **tdd** skill when test-first is practical. It is an option, not a gate.
+- Bug fix with a clear, cheap test path → the **tdd** skill. It is an option, not a gate.
 - Before commit → the **deslop** skill.
 - Before review → the **no-comments** skill.
 - Opening a PR → the **Opening a PR** playbook. Only when the user asks.
