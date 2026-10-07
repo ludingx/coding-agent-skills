@@ -16,6 +16,7 @@ Match a playbook first. Copy its steps into a todo list before any bespoke plan.
 
 Triggers:
 
+- Nontrivial multi-step → write the throughput checkpoint (Feature step 1).
 - Before commit → the **deslop** skill.
 - Before review → the **no-comments** skill.
 - Opening a PR → the **Opening a PR** playbook. Only when the user asks.
