@@ -16,6 +16,7 @@ Match a playbook first. Copy its steps into a todo list before any bespoke plan.
 
 Triggers:
 
+- Any code change → before the first edit, the **using-git-worktrees** skill, unless you're already in a worktree or the user says "work here". New work branches off the freshly fetched default branch. Work on an existing PR uses its branch.
 - Nontrivial multi-step → write the throughput checkpoint (Feature step 1).
 - Before commit → the **deslop** skill.
 - Before review → the **no-comments** skill.
