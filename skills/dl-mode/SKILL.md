@@ -16,7 +16,6 @@ Match a playbook first. Copy its steps into a todo list before any bespoke plan.
 
 Triggers:
 
-- Bug fix with a clear, cheap test path → the **tdd** skill. It is an option, not a gate.
 - Before commit → the **deslop** skill.
 - Before review → the **no-comments** skill.
 - Opening a PR → the **Opening a PR** playbook. Only when the user asks.
@@ -39,6 +38,7 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 
 - **Prove It Works** (**principle-prove-it-works**). After a task, before declaring done. Verify against the real artifact, not a proxy or "it compiles".
 - **Fix Root Causes** (**principle-fix-root-causes**). Debugging. Trace each symptom to its root cause, reproduce first, ask why until you reach it.
+- **Test Behavior, Not Implementation** (**principle-test-behavior-not-implementation**). Writing, changing, or keeping a test. Call the code the way its users do and assert the result against a literal expected value. If the test would still pass when every imported function returns `undefined`, rewrite the assertion or delete the test.
 
 **Meta**
 
