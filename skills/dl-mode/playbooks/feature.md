@@ -1,11 +1,17 @@
 # Feature
 
-Own the feature from code to verification. Use tests to learn and prove behavior, not to satisfy a prescribed ceremony.
+**You own the design. Plan, review, verify.** Delegate implementation. Stay in the lead.
 
-1. **Ground the change.** Find the user-facing path, its owner, existing behavior, applicable repository guidance, and available app-running instructions. Nearby code is evidence, not automatically a good pattern; distinguish stable interfaces and conventions from incidental legacy workarounds. If a product decision or the intended behavior is genuinely unclear, ask rather than inventing it.
-2. **Choose the boundary.** State briefly what changes for users, what must remain unchanged, and where the smallest clear branch belongs. If behind a feature flag, identify the flag's existing convention and explicitly preserve the flag-off path. Do not move or rewrite the old path merely to add the new one. If a broad preparatory change is unavoidable, explain why and keep it separately reviewable where possible.
-3. **Build in verifiable units.** Make one coherent change at a time. Add or adapt tests at observable boundaries where they provide useful proof; test-first is an option, not a gate. Check each unit before expanding the diff. Do not add unrelated cleanup, speculative abstractions, or workarounds copied from adjacent code.
-4. **Verify the product.** Run relevant targeted tests and the applicable project-local verification instructions. Drive the changed user path in the running app and check important preserved behavior; for a flagged feature, exercise both flag-on and flag-off states. Record commands, observed outcomes, and evidence. If local or staging prerequisites block a check, mark it **not verified** and say exactly what blocked it; never infer success from a passing unit test or an agent's report.
-5. **Review the diff.** Compare against the base branch as a human reviewer would. Remove incidental code movement and changes unrelated to the feature. Check that a reviewer can locate the new behavior, the unchanged path, and the evidence without reconstructing the entire implementation.
+1. Write the throughput checkpoint as four todo items. A dimension that genuinely does not apply (single file, no fan-out) keeps its item with `n/a: <reason>` rather than being dropped:
+   - **Blocking first steps.** Gates run before fan-out.
+   - **Independent workstreams.** Disjoint files, services, or layers parallelize. Shared writes serialize.
+   - **Shared mutable state.** Default to splitting the target. Serialize only for real invariants.
+   - **Smallest safe decomposition.** If one worker is best, name why.
+2. Delegate code-writing to a subagent with a specific scope (file paths, the data shape, and success criteria). Mandatory: no skip-with-reason escape, and Laziness Protocol does not override it (the gain is review separation, not lines saved). A subagent forbidden to spawn satisfies this by owning the diff directly with the same review separation. No "standing by" reply that waits on a nested agent. Surgical edits, re-ground against the source for upstream-derived files. Port shared-primitive improvements to all consumers and verify each. Commit liberally.
+3. Verify on the surface the user uses (the running app, CLI, or UI). "Inconclusive" or wrong-surface is not a pass. Flag it.
+4. Rebase into small, ordered commits. Stack follow-ups.
+5. Run **Opening a PR** when the user asks.
 
-Hand back a short briefing: what changed; what stayed unchanged; what was run and observed; what remains unverified. Do not turn this into a file-by-file narrative or a mandatory written plan.
+Code-coupled work (one feature, one migration) goes to a single owner with the checkpoint inline. That owner fans out internally after the blocking phase. Parent-level fan-out is for slices that produce independent artifacts (audits, cross-subsystem investigations, competing experiments). Rewrite the checkpoint at phase boundaries. Spawn a fresh owner rather than chaining interrupts.
+
+Hand back: what you built, what you chose and why, the throughput checkpoint, open decisions.

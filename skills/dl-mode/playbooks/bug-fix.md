@@ -1,12 +1,14 @@
 # Bug fix
 
-Own the diagnosis and the proof, not just the code change.
+**You own this task. Plan, review, verify.** Delegate investigation and the fix to subagents, stay in the lead.
 
-1. **Reproduce the failure.** Find the affected user path and the project's instructions for running it. Drive the failing behavior locally on the same surface the user uses, and record the input, expected result, and actual result. If it does not reproduce, investigate the conditions or instrument the path; do not claim to have fixed an unobserved failure.
-2. **Trace the cause.** Follow the failing path through the relevant code and runtime evidence. Test hypotheses against observations rather than guessing. Distinguish the mechanism causing the failure from the symptom; do not add a guard or workaround merely because it might help. Nearby legacy code is evidence, not an instruction to copy its pattern.
-3. **Make the smallest justified fix.** Change only what the confirmed cause requires. Add a focused regression test at an observable boundary when it can capture the failure; test-first is useful when practical, not mandatory. Keep unrelated cleanup and broad refactoring out of the bug fix.
-4. **Recheck the original path.** Rerun the same input on the same surface and record the result. Run relevant targeted tests and check important nearby behavior for regressions. A passing unit test or a different test surface does not by itself prove that the original bug is gone. If the path remains inaccessible, report it as **not verified**, not fixed.
-5. **Review the diff.** Compare with the base branch. Remove speculative changes and incidental code movement. Make it easy for a reviewer to connect each changed line to the cause and the before/after evidence.
-6. **Stage the commits.** Stage the commits so the failing repro lands before the fix in git history. See the **tdd** skill for the failing-test-first cadence when the bug has a cheap local test path. Skip it when the test would be expensive, integration-heavy, or unclear.
+Be scientific. Every shipped line traces to runtime evidence. Belt-and-suspenders that "might help" is a hypothesis, not a fix. It does not ship. When evidence refutes a hypothesis, revert what it motivated. The smallest change the evidence justifies ships, nothing more.
 
-Hand back a short briefing: failure before; root cause and fix; result of the same reproduction after; regression checks; anything not verified. Include concrete commands, observations, or evidence pointers, not a debugging diary.
+1. Reproduce it yourself on the matching surface. Ask the user only with a stated, specific reason you cannot reach the target, and only after driving it as far as it goes. If it won't reproduce directly, synthesize the trigger, tighten conditions, or instrument until it fires.
+2. Binary-search the cause. Form the candidate hypotheses, then rule them out until one survives. Each pass, take the split that cuts the most remaining problem space, get runtime evidence, eliminate. When program state is unclear, add instrumentation or logging and read it as the code runs. Don't guess. Confirm the surviving *mechanism* with runtime evidence before planning the fix.
+3. Plan the fix. Delegate implementation to a subagent with a specific scope.
+4. Verify on the same surface. The original repro now passes. "Inconclusive" or wrong-surface is not a pass. Flag it. Unit tests show branch behavior, not bug absence.
+5. Stage the commits so the failing repro lands before the fix in git history. See the **tdd** skill for the failing-test-first cadence when the bug has a cheap local test path. Skip it when the test would be expensive, integration-heavy, or unclear.
+6. Run **Opening a PR** when the user asks.
+
+Hand back: what was broken, root cause, fix, how you verified. Paste failing-then-passing repro output verbatim.
