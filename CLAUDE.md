@@ -8,7 +8,4 @@ Skills live in `skills/<name>/SKILL.md`. When a user request matches a skill's i
 
 | Skill | Trigger |
 |---|---|
-| `surgical-changes` | Implementing a feature, fixing a bug, editing an existing codebase |
-| `tdd` | Building with tests, red-green-refactor, test-first development |
-| `make-plan` | Understanding requirements and producing an implementation plan before any code is written |
 | `using-git-worktrees` | Starting feature work that needs isolation, or before executing implementation plans |

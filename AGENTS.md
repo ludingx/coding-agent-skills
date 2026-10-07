@@ -6,13 +6,6 @@ This repository contains reusable skills and commands for AI coding agents.
 
 When a user request matches a skill's intent, load and follow the skill from `skills/<name>/SKILL.md` rather than implementing directly.
 
-## Intent Mapping
-
-| User intent | Skill |
-|---|---|
-| Implementing a feature or fixing a bug | `skills/surgical-changes/SKILL.md` |
-| Building with tests, TDD, red-green-refactor | `skills/tdd/SKILL.md` |
-
 ## Skill Structure
 
 ```

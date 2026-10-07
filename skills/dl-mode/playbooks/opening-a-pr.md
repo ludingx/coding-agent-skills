@@ -1,9 +1,4 @@
----
-name: opening-a-pr
-description: Prepare commits and open a reviewable GitHub pull request. Use when the user asks to open a PR, or when a workflow reaches PR creation.
----
-
-### Opening a PR
+# Opening a PR
 
 Use when opening a PR.
 
