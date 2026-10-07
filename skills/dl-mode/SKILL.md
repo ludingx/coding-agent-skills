@@ -83,6 +83,6 @@ Every playbook ends with a reply written this way, PR link as `https://github.co
 Playbook `<name>` is `playbooks/<name>.md` next to this skill. Say which one you picked in one line. If none matches, do the task under the rules above.
 
 - **Feature.** Add or change a product capability, including flagged work. `playbooks/feature.md`.
-- **Bug fix.** Something is broken or regressed and can be reproduced locally. `playbooks/bug-fix.md`.
+- **Bug fix.** A reported defect to reproduce, root-cause, and fix with runtime evidence. `playbooks/bug-fix.md`.
 - **Babysit.** Drive an open PR to ready for human approval: conflicts, review threads, CI. `playbooks/babysit.md`.
 - **Opening a PR.** Prepare commits and open a reviewable GitHub PR, when the user asks. `playbooks/opening-a-pr.md`.
