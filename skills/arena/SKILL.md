@@ -48,9 +48,9 @@ Read every candidate end to end before picking.
 
 Score each candidate against the rubric criterion by criterion, not on holistic feel. Compare against the cross-judge. Agreement on the base confirms the pick. Disagreement means one of you is biased or the rubric was ambiguous. Read both rationales before deciding.
 
-Pick the base on which candidate a future maintainer can extend most easily without breaking invariants. Prefer the cleaner boundary or smaller API when two feel tied, per the **principle-laziness-protocol** skill.
+Pick the base on which a future maintainer can extend the artifact most easily without breaking invariants. Prefer the cleaner boundary or smaller API when two feel tied, per the **principle-laziness-protocol** skill.
 
-Record the pick and the reason in a short synthesis note alongside the base artifact, including the cross-judge's verdict.
+Record the pick and the reason in a short synthesis note alongside the base artifact, including the cross-judge's verdict. Write this durable design artifact with **technical-writing**.
 
 ## Phase E: Graft
 

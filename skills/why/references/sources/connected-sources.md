@@ -21,8 +21,11 @@ Rules for every category:
 3. Walk the tree. Sub-issues are tactical. Parents often carry the why.
 4. Read project-level docs attached to the ticket's project.
 5. Read labels and milestones. Labels hint at the motivation (customer request, incident follow-up, compliance). Milestones tie work to deadlines.
+6. Check status updates, attachments, linked PRs, and duplicate-of relationships for later scope changes. Follow duplicates to the canonical ticket.
 
 **Pitfalls.** Scope drift (a ticket closed and reopened with a new scope). Boilerplate "Why" sections. Stale tickets that describe a plan that later changed. Closed-as-duplicate chains (follow them to the canonical ticket).
+
+**Return.** Ticket ID and title; exact motivation quoted from the description or comments; labels, parent, project, author and dates; and a link. Report inaccessible private tickets as gaps.
 
 ## Long-form documents
 
@@ -34,6 +37,8 @@ Rules for every category:
 2. Fetch candidate pages and read the full content, not the preview. Rationale is often buried mid-document.
 3. Follow backlinks and child pages. Alternatives considered often live in sub-pages or appendices.
 4. Check meeting notes and databases that may record the decision.
+
+**Return.** Page URL, title, author and date; the exact rationale and alternatives considered, with location within the document. Distinguish an approved decision from an abandoned draft.
 
 **Pitfalls.** Docs written before implementation and never updated. Doc vs. reality drift (the spec says X, the code does Y). Flag the divergence. Boilerplate templates. Unlinked docs that only broad search finds. Multiple drafts (find the finalized or latest one by date).
 
@@ -52,7 +57,7 @@ Rules for every category:
 
 **Pitfalls.** Unsearchable DMs (a known blind spot). Jokes read as decisions ("lol just do the thing" is not a decision). Single messages read without their thread.
 
-**Return.** Channel, permalink, participants, date range, verbatim quotes with attribution.
+**Return.** Channel, permalink, participants, date range, verbatim quotes with attribution, and whether the thread records a decision or only a hypothesis. Name retention cliffs and unsearchable DMs as gaps.
 
 ## Infrastructure observability
 
@@ -67,7 +72,11 @@ Rules for every category:
 5. Traces for timeouts, retries, slow paths, and cross-service behavior.
 6. Incident records near the date the target was added, when the code looks defensive.
 
+**Strong evidence.** A monitor's query and threshold match the guarded condition; a pre-change error pattern matches the target's handled error; or an incident timeline explicitly links an action item to the change. A spike before a merge and a drop after it are only circumstantial until checked against neighboring releases.
+
 **Pitfalls.** Correlation is not causation (check neighboring PRs in the same window). A metric existing means someone cared, not that the code exists because of it. Renamed or expired telemetry is a gap, not a null.
+
+**Return.** Type, name and link or identifier; owner and date where known; exact query, threshold, error string or incident quote; time window and the strength of its connection to the code. Aggregate high-volume logs rather than dumping rows.
 
 ## Error / exception tracking
 
@@ -80,8 +89,11 @@ Rules for every category:
 3. Narrow by release and a window around the target's ship date.
 4. Pull full events for stack traces through the target.
 5. Check which releases landed near the target and which issues stopped after them.
+6. Read issue comments and resolution notes. Treat automated root-cause summaries as hypotheses; verify them against actual events and stack traces.
 
 **Pitfalls.** Grouping drift (a refactor can move the "same" error to a new issue ID). A release holds many commits, so an issue stopping at a release doesn't prove the target fixed it. Upstream changes can silence an error. "Resolved" is a human marker, not proof of a fix. Sampling can make a common error look rare. AI-generated issue summaries are not evidence. Cite the events.
+
+**Return.** Issue ID and link, organization and project, first/last seen, count and sampling rate where known, affected releases, a representative event's stack excerpt, and any author comment linking the fix. Check for a newly grouped issue immediately after the apparent disappearance.
 
 ## Product analytics warehouse
 
@@ -95,9 +107,11 @@ Rules for every category:
 4. **Query history** for migrations, backfills, or perf rewrites. The expensive queries in a tight window around the change.
 5. **Lineage.** If a pipeline model's own code lives in the repo, hand that lead to the source control investigator.
 
+Prefer typed, deduplicated event models over raw event tables where the warehouse provides both. Confirm timestamps and columns before querying; time-bound scans around the ship date. Use raw data only when a typed model is missing or refresh lag matters, and account for duplicates. If a query is asynchronous, retrieve its result rather than submitting it again.
+
 **Pitfalls.** Instrumented is not caused. A volume step can mean a new event started being logged, not a behavior change. Schema drift (a column may not have existed when the target was written). Pipeline refresh lag for recent data. Notebooks are usually not queryable over SQL, so name them as a gap.
 
-**Return.** Fully qualified tables, the time windows, and the numeric summaries that bear on the question.
+**Return.** Fully qualified tables, exact queries, time windows, compact numeric summaries and their correlation with the ship date. Name notebook access, refresh lag and retention limits as gaps when relevant; do not dump raw rows.
 
 ## What every investigator returns
 

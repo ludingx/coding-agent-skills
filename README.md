@@ -117,27 +117,35 @@ The skills support different stages of software engineering work. Use the ones t
 
 ### User-invoked skills
 
-- [`dl-mode`](./skills/dl-mode/SKILL.md): Route a request to a playbook (build a feature, fix a bug, babysit a PR) with shared rules for verified, root-cause work.
+- [`dl-mode`](./skills/dl-mode/SKILL.md): Route a request to a playbook (investigate, pick up prior work, build a feature, fix a bug, or babysit a PR) with shared rules for verified, root-cause work.
 - [`grilling`](./skills/grilling/SKILL.md): Stress-test a plan, decision, or idea by surfacing assumptions and edge cases.
 - [`grill-with-docs`](./skills/grill-with-docs/SKILL.md): Sharpen a plan and capture decisions in project documentation.
 - [`research`](./skills/research/SKILL.md): Investigate a topic using high-trust sources and capture findings.
-- [`prototype`](./skills/prototype/SKILL.md): Build a throwaway prototype to explore a design question.
 - [`to-spec`](./skills/to-spec/SKILL.md): Turn a discussion into a specification.
 - [`to-tickets`](./skills/to-tickets/SKILL.md): Break work into implementation tickets.
 - [`bro`](./skills/bro/SKILL.md): Restate the last message in plain language, without jargon.
 - [`unslop`](./skills/unslop/SKILL.md): Cut AI writing patterns and jargon from text.
 - [`reflect`](./skills/reflect/SKILL.md): Review the session transcript with three parallel reviewers and turn durable learnings into skill edits you approve.
 - [`tdd`](./skills/tdd/SKILL.md): Write a failing regression test before fixing a bug, when the test path is clear and cheap.
-- [`architect`](./skills/architect/SKILL.md): Sketch types, signatures, and module boundaries from several independent candidates before writing code.
-- [`arena`](./skills/arena/SKILL.md): Run several parallel attempts at the same task, pick a base, and graft the best parts of the others into it.
-- [`interrogate`](./skills/interrogate/SKILL.md): Have several independent reviewers adversarially review a change, then sort their findings into act on, consider, noted, and dismissed.
-- [`how`](./skills/how/SKILL.md): Explain how a subsystem works, with parallel read-only explorers for large questions.
-- [`why`](./skills/why/SKILL.md): Investigate why code is shaped the way it is across git history and any connected MCPs, with confidence-labeled findings.
-- [`teach`](./skills/teach/SKILL.md): Combine `how` and `why` into one plain explanation, paced for the person asking.
-- [`recall`](./skills/recall/SKILL.md): Rebuild your recent working context from chat history and live repo state, then hand back a short brief.
+- [`architect`](./skills/architect/SKILL.md): Explore types, signatures, and module boundaries before implementing a change.
+- [`arena`](./skills/arena/SKILL.md): Compare parallel implementations, choose a base, and graft in the strongest ideas.
+- [`interrogate`](./skills/interrogate/SKILL.md): Adversarially review a change and sort findings by actionability.
+- [`how`](./skills/how/SKILL.md): Explain how a subsystem works and build a working mental model of its architecture.
+- [`why`](./skills/why/SKILL.md): Investigate why code was shaped a certain way, using available evidence and explicit confidence levels.
+- [`teach`](./skills/teach/SKILL.md): Explain what something is, how it works, and why in one clear account.
+- [`recall`](./skills/recall/SKILL.md): Reconstruct recent working context and return a concise brief on current status and next steps.
 
 ### Model-invoked skills
 
+- [`prototype`](./skills/prototype/SKILL.md): Build an isolated, throwaway UI or logic prototype to settle a design question.
+- [`principle-experience-first`](./skills/principle-experience-first/SKILL.md): Choose the best experience for the people who use and maintain the result.
+- [`principle-model-the-domain`](./skills/principle-model-the-domain/SKILL.md): Choose data structures that encode the domain before implementing logic.
+- [`principle-explain-the-number`](./skills/principle-explain-the-number/SKILL.md): Check what a measured number actually establishes before trusting or reporting it.
+- [`principle-guard-the-context-window`](./skills/principle-guard-the-context-window/SKILL.md): Keep large payloads out of the main context and return concise findings.
+- [`principle-never-block-on-the-human`](./skills/principle-never-block-on-the-human/SKILL.md): Proceed with reversible work and pause for irreversible actions or product decisions.
+- [`principle-sequence-verifiable-units`](./skills/principle-sequence-verifiable-units/SKILL.md): Break multi-step work into units that each end with a check.
+- [`principle-build-the-lever`](./skills/principle-build-the-lever/SKILL.md): Build a rerunnable tool that performs or proves non-trivial work.
+- [`principle-name-the-state`](./skills/principle-name-the-state/SKILL.md): Replace tangled guards with positive, domain-named predicates.
 - [`using-git-worktrees`](./skills/using-git-worktrees/SKILL.md): Set up an isolated worktree for feature work.
 - [`domain-modeling`](./skills/domain-modeling/SKILL.md): Clarify domain terminology and record architectural decisions.
 - [`handoff`](./skills/handoff/SKILL.md): Prepare a concise handoff for another agent.

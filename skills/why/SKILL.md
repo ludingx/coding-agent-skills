@@ -10,7 +10,7 @@ Investigate the motivation and intent behind code.
 
 Companion to the `how` skill. `how` answers what the code does and how it works. `why` answers what forces led to its shape.
 
-Spawn subagents with your agent's subagent tool: the `Agent` tool in Claude Code, the `task` tool in OpenCode. Investigators run on a fast, cheap model where your agent lets you pick one (`model: haiku` on Claude Code's `Agent` tool). The synthesizer runs on your strongest model. OpenCode's `task` tool uses each subagent's configured model.
+Spawn subagents with your agent's subagent tool: the `Agent` tool in Claude Code, the `task` tool in OpenCode. In OpenCode, configure investigators to use `openai.gpt-6-luna`; on other agents, use a fast, cheap model where configurable. The synthesizer runs on your strongest model. OpenCode's `task` tool uses each subagent's configured model.
 
 ## Operating Posture
 

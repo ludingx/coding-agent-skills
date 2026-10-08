@@ -1,14 +1,12 @@
 # Investigation
 
-**You own the answer. Plan, route, write.**
+**You own the answer. Plan, route, and write.** Investigation requests are read-only. Produce a cited explanation or recommendation, not a code change.
 
-Investigation requests are read-only. They produce a cited explanation or a recommendation, not a code change.
+1. Route through the **how** skill. For motivation or design-rationale questions, also route through **why**. If the request is a read-only choice between alternatives, answer from evidence here. Route to Prototype only when running or viewing an experiment can settle the question.
+2. Keep the throughput checkpoint to one line: `throughput checkpoint: n/a, read-only investigation`.
+3. Use the output shape from **how**: Overview, Key Concepts, How It Works, Where Things Live, and Gotchas. For decisions between alternatives, include a recommendation and tradeoffs.
+4. Apply **unslop** to the reply.
 
-1. Route through the **how** skill. For motivation questions, also route through the **why** skill.
-2. Throughput checkpoint stays one line: `throughput checkpoint: n/a, read-only investigation`.
-3. Produce the `how`-shaped output (Overview / Key Concepts / How It Works / Where Things Live / Gotchas), or a recommendation with a tradeoffs table if the request is a decision between alternatives.
-4. Apply the **unslop** skill to the reply.
+No worktree, PR, or babysitting, and no `architect` unless the investigation precedes a code change. If investigation precedes a code change, hand back for re-routing to Bug Fix or Feature.
 
-No worktree, no PR, no babysit, no `architect` unless the investigation precedes a code change. If the investigation precedes a code change, hand back to the user and re-route to Bug fix or Feature.
-
-Hand back: the investigation output. For "are we sure?" answers, include your real judgment with reasons. Push back if the premise is wrong (see Autonomy).
+Hand back: the investigation. For "are we sure?" questions, include the evidence behind the judgment and push back if the premise is wrong.
