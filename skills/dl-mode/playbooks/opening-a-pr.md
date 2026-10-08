@@ -20,10 +20,12 @@ Use these sections in order. Drop a section when it has nothing to say.
 - `## Blast Radius`. In one to three sentences, name who or what the change touches and why the change is safe or risky. State the continuing cost if main stays red without the fix.
 - `## Verification`. Name each real run path and its outcome. For a performance change, report one primary number with its unit in `before → after` form. Do not include sample-size methodology or metric tables.
 
-After these sections, attach videos or screenshots when they prove a claim. Do not paste full SHAs or file-by-file checklists. Put these details in a linked artifact. Do not use `## Summary` or `## Test plan` boilerplate. A commit body does not restate its subject.
+After these sections, attach videos or screenshots when they prove a claim. Do not paste full SHAs, arena candidate recitals, or file-by-file checklists. Put these details in a linked artifact. Do not use `## Summary` or `## Test plan` boilerplate. A commit body does not restate its subject.
 
 **Forge.** Use GitHub CLI (`gh`) for PR creation, editing, viewing, watching, and merging.
 
 **Size and stacks.** Prefer five narrow PRs to one large PR. A stack is a base-branch chain. The root PR targets trunk. Each child branch rebases onto its parent's exact tip and its PR targets the parent branch. Create a child with `gh pr create --base <parent-branch>`. Retarget an existing child with `gh pr edit <pr> --base <parent-branch>`. Branch from trunk only for independent work. Rebase on trunk before substantial stack work.
 
 **Readiness.** Open every PR ready, never as a draft. With `gh`, omit `--draft`. If a PR still opens as a draft, run `gh pr ready <number>`. Run `gh pr view <number>` before you refer to PR status.
+
+A subagent that opens a PR runs `interrogate`, `/deslop`, and `/no-comments`, and posts the URL. Then it returns to the parent without babysitting.

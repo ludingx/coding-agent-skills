@@ -18,7 +18,11 @@ Triggers:
 
 - Any code change → before the first edit, the **using-git-worktrees** skill, unless you're already in a worktree or the user says "work here". New work branches off the freshly fetched default branch. Work on an existing PR uses its branch.
 - Nontrivial change, architecture decision, or "are we sure?" → the **how** skill.
-- Nontrivial multi-step → write the throughput checkpoint (Feature step 2).
+- Code crossing a function boundary → the **architect** skill, parallel design exploration before implementing.
+- Design or code bakeoff, where one attempt would lock in the wrong shape → the **arena** skill, with base selection and grafting.
+- Contested design → the **interrogate** skill before shipping.
+- A "which approach" or "what should this look like" fork that running something could settle → the **Prototype** playbook, not a question to the user. Reserve the question for a product or preference call no experiment can settle.
+- Nontrivial multi-step → write the throughput checkpoint (Feature step 3).
 - Before commit → the **deslop** skill.
 - Before review → the **no-comments** skill.
 - Opening a PR → the **Opening a PR** playbook. Only when the user asks.
@@ -36,6 +40,17 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 
 - **Laziness Protocol** (**principle-laziness-protocol**). Refactoring, sizing a diff, or tempted to add abstractions, layers, or signal threading. Bias to deletion and the smallest change that solves the problem.
 - **Subtract Before You Add** (**principle-subtract-before-you-add**). Sequencing an addition, refactor, or rewrite. Remove dead weight first, then build on the simpler base.
+- **Foundational Thinking** (**principle-foundational-thinking**). Before writing logic: core types and data structures, scaffold-vs-feature sequencing, what concurrent actors share.
+- **Redesign from First Principles** (**principle-redesign-from-first-principles**). Integrating a new requirement into an existing design. Redesign as if it had been foundational from day one.
+- **Minimize Reader Load** (**principle-minimize-reader-load**). Reviewing or shaping code that's hard to trace. Count layers and hidden state, collapse one-caller wrappers, shrink mutable scope.
+- **Outcome-Oriented Execution** (**principle-outcome-oriented-execution**). Planned rewrites and migrations with explicit phase boundaries. Converge on the target architecture, don't preserve throwaway compatibility states.
+- **Exhaust the Design Space** (**principle-exhaust-the-design-space**). A novel interaction or architectural decision with no precedent. Build 2-3 competing prototypes and compare before committing.
+
+**Architecture**
+
+- **Boundary Discipline** (**principle-boundary-discipline**). Wiring validation, error handling, or framework adapters. Guards at system boundaries, trust internal types, keep business logic pure.
+- **Make Operations Idempotent** (**principle-make-operations-idempotent**). Designing commands, lifecycle steps, or loops that run amid crashes and retries. Converge to the same end state.
+- **Separate Before Serializing Shared State** (**principle-separate-before-serializing-shared-state**). Concurrent actors might write the same file, branch, key, or object. Eliminate the sharing first.
 
 **Verification**
 
@@ -59,7 +74,7 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 
 ## Subagents
 
-**Use the `dl-agent` subagent for any subagent you spawn inside a playbook step** (code-writing delegates, ad-hoc helpers). In Claude Code it is `coding-agent-skills:dl-agent`. In OpenCode it is `dl-agent`. `/dl-mode` and `dl-agent` route through the same rules. Routed workflow skills (`how`, `why`, `reflect`) set their own subagent type for diverse review. Respect what the skill prescribes, don't override to `dl-agent`.
+**Use the `dl-agent` subagent for any subagent you spawn inside a playbook step** (code-writing delegates, ad-hoc helpers). In Claude Code it is `coding-agent-skills:dl-agent`. In OpenCode it is `dl-agent`. `/dl-mode` and `dl-agent` route through the same rules. Routed workflow skills (`how`, `why`, `arena`, `architect`, `interrogate`, `reflect`) set their own subagent type for diverse review. Respect what the skill prescribes, don't override to `dl-agent`.
 
 **Defaults for every subagent call.** Run in the background. Pass file pointers, not inlined context.
 
@@ -87,6 +102,7 @@ Playbook `<name>` is `playbooks/<name>.md` next to this skill. Say which one you
 
 - **Investigation.** Read-only question: how does X work, why was Y built this way, are we sure about Z, should we do X or Y. `playbooks/investigation.md`.
 - **Feature.** Add or change a product capability, including flagged work. `playbooks/feature.md`.
+- **Prototype.** A throwaway sketch to make a design or behavioral decision cheaply, or to settle an empirical fork by observing it instead of asking the user ("prototype", "mock it up", "try this layout", "sketch it to decide"). `playbooks/prototype.md`.
 - **Bug fix.** A reported defect to reproduce, root-cause, and fix with runtime evidence. `playbooks/bug-fix.md`.
 - **Babysit.** Drive an open PR to ready for human approval: conflicts, review threads, CI. `playbooks/babysit.md`.
 - **Opening a PR.** Prepare commits and open a reviewable GitHub PR, when the user asks. `playbooks/opening-a-pr.md`.
