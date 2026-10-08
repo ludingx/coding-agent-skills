@@ -128,6 +128,9 @@ The skills support different stages of software engineering work. Use the ones t
 - [`unslop`](./skills/unslop/SKILL.md): Cut AI writing patterns and jargon from text.
 - [`reflect`](./skills/reflect/SKILL.md): Review the session transcript with three parallel reviewers and turn durable learnings into skill edits you approve.
 - [`tdd`](./skills/tdd/SKILL.md): Write a failing regression test before fixing a bug, when the test path is clear and cheap.
+- [`architect`](./skills/architect/SKILL.md): Sketch types, signatures, and module boundaries from several independent candidates before writing code.
+- [`arena`](./skills/arena/SKILL.md): Run several parallel attempts at the same task, pick a base, and graft the best parts of the others into it.
+- [`interrogate`](./skills/interrogate/SKILL.md): Have several independent reviewers adversarially review a change, then sort their findings into act on, consider, noted, and dismissed.
 - [`how`](./skills/how/SKILL.md): Explain how a subsystem works, with parallel read-only explorers for large questions.
 - [`why`](./skills/why/SKILL.md): Investigate why code is shaped the way it is across git history and any connected MCPs, with confidence-labeled findings.
 - [`teach`](./skills/teach/SKILL.md): Combine `how` and `why` into one plain explanation, paced for the person asking.
