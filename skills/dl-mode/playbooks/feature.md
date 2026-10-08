@@ -2,17 +2,17 @@
 
 **You own the design. Plan, review, verify.** Delegate implementation. Stay in the lead.
 
-1. `how` over the affected subsystem.
-2. `architect` for parallel design exploration.
+1. Run **how** over the affected subsystem.
+2. Run **architect** for parallel design exploration. Pass its Ground phase the `how` findings instead of repeating the same exploration. Architect reruns `how` only when the scope changed or implementation exposed a new question.
 3. Write the throughput checkpoint as four todo items. A dimension that genuinely does not apply (single file, no fan-out) keeps its item with `n/a: <reason>` rather than being dropped:
    - **Blocking first steps.** Gates run before fan-out.
    - **Independent workstreams.** Disjoint files, services, or layers parallelize. Shared writes serialize.
    - **Shared mutable state.** Default to splitting the target (the **principle-separate-before-serializing-shared-state** skill). Serialize only for real invariants.
    - **Smallest safe decomposition.** If one worker is best, name why.
-4. Delegate code-writing to a subagent with a specific scope (file paths, the data shape, and success criteria). When the implementation admits multiple valid shapes (error handling, abstraction layer, test structure), delegate via the **arena** skill instead so the candidates surface the alternatives and the cross-judge guards the pick. Mandatory: no skip-with-reason escape, and Laziness Protocol does not override it (the gain is review separation, not lines saved). A subagent forbidden to spawn satisfies this by owning the diff directly with the same review separation. No "standing by" reply that waits on a nested agent. Surgical edits, re-ground against the source for upstream-derived files. Port shared-primitive improvements to all consumers and verify each. Commit liberally.
+4. Delegate code-writing to a subagent with a specific scope (file paths, the named data shape and its organizing structure per **principle-model-the-domain**, and success criteria). When the implementation admits multiple valid shapes (error handling, abstraction layer, test structure), use **arena** only if Architect did not already compare those shapes. The Architect Arena run owns alternatives that are part of the design; do not repeat that bakeoff. Mandatory: no skip-with-reason escape, and Laziness Protocol does not override it (the gain is review separation, not lines saved). A subagent forbidden to spawn satisfies this by owning the diff directly with the same review separation. No "standing by" reply that waits on a nested agent. Surgical edits, re-ground against the source for upstream-derived files. Port shared-primitive improvements to all consumers and verify each. Commit liberally.
 5. Verify on the surface the user uses (the running app, CLI, or UI). For a flagged feature, exercise both flag-on and flag-off states. "Inconclusive" or wrong-surface is not a pass. Flag it.
 6. Rebase into small, ordered commits. Stack follow-ups.
-7. If the design is contested, `interrogate` before shipping.
+7. If the design is contested, use `interrogate` before shipping.
 8. Run **Opening a PR** when the user asks.
 
 Code-coupled work (one feature, one migration) goes to a single owner with the checkpoint inline. That owner fans out internally after the blocking phase. Parent-level fan-out is for slices that produce independent artifacts (audits, cross-subsystem investigations, competing experiments). Rewrite the checkpoint at phase boundaries. Spawn a fresh owner rather than chaining interrupts.

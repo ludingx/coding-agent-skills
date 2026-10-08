@@ -1,6 +1,6 @@
 # UI Prototype
 
-Generate **several radically different UI variations** on a single route, switchable from a floating bottom bar. The user flips between variants in the browser, picks one (or steals bits from each), then throws the rest away.
+Generate **several radically different UI variations** in an isolated scratch prototype, switchable from a floating bottom bar. The user flips between variants, picks one (or steals bits from each), then throws the rest away.
 
 If the question is about logic/state rather than what something looks like, this is the wrong branch. Use [LOGIC.md](LOGIC.md).
 
@@ -13,21 +13,21 @@ If the question is about logic/state rather than what something looks like, this
 
 ## Two sub-shapes: strongly prefer sub-shape A
 
-A UI prototype is much easier to judge when it's **butting up against the rest of the app**: real header, real sidebar, real data, real density. A throwaway route on its own is a vacuum: every variant looks fine in isolation. Default to sub-shape A whenever there's a plausible existing page to host the variants. Only reach for sub-shape B if the prototype genuinely has no nearby home.
+A UI prototype is easier to judge when it reflects the app's real content and constraints. Recreate the relevant page context and realistic data in scratch space. Keep every variant outside production source. The prototype must not add a route, switcher, or production dependency.
 
-### Sub-shape A: adjustment to an existing page (preferred)
+### Sub-shape A: simulate an existing page (preferred)
 
-The route already exists. Variants are rendered **on the same route**, gated by a `?variant=` URL search param. The existing data fetching, params, and auth all stay. Only the rendering swaps. This is the default; pick it unless there's a specific reason not to.
+The production route already exists. Recreate enough of its surrounding interface, data density, and behavior in the scratch prototype to judge the design. Keep variants separate from production components and data fetching.
 
-If the prototype is for something that doesn't yet have a page but *would naturally live inside one* (a new section of the dashboard, a new card on the settings screen, a new step in an existing flow), it's still sub-shape A. Mount the variants inside the host page.
+If the prototype is for something that does not yet have a page but would naturally live inside one, simulate that host page in scratch space and place each variant in context.
 
-### Sub-shape B: a new page (last resort)
+### Sub-shape B: a new surface
 
-Only use this when the thing being prototyped genuinely has no existing page to live inside (e.g. an entirely new top-level surface, or a flow that can't be embedded anywhere sensible).
+Use this when the thing being prototyped genuinely has no existing page context, such as an entirely new top-level surface or a flow that cannot sensibly be embedded elsewhere.
 
-Create a **throwaway route** following whatever routing convention the project already uses. Don't invent a new top-level structure. Name it so it's obviously a prototype (e.g. include the word `prototype` in the path or filename). Same `?variant=` pattern.
+Create the surface only in the isolated scratch prototype. Do not add a route to the production app.
 
-Before committing to sub-shape B, sanity-check: is there really no existing page this could be embedded in? An empty route hides design problems that a populated one would expose.
+Before choosing this shape, check whether existing page context would expose design problems that a blank canvas would hide.
 
 In both sub-shapes the floating bottom bar is identical.
 
@@ -37,29 +37,29 @@ In both sub-shapes the floating bottom bar is identical.
 
 Default to **3 variants**. More than 5 stops being radically different and starts being noise, so cap there.
 
-Write down the plan in one line, in the prototype's location or a top-of-file comment:
+Create the prototype in an isolated scratch directory outside production source. Write down the plan in one line at the top of the prototype:
 
-> "Three variants of the settings page, switchable via `?variant=`, on the existing `/settings` route."
+> "Three variants of the settings-page design, switchable with `?variant=` in the isolated prototype."
 
-This works whether the user is here to push back or not.
+Keep the prototype easy to run with one command. Use vanilla HTML/CSS/JS or the lightest stack that renders the idea. Do not add production dependencies or tests. This works whether the user is here to push back or not.
 
 ### 2. Generate radically different variants
 
 Draft each variant. Hold each one to:
 
 - The page's purpose and the data it has access to.
-- The project's component library / styling system (TailwindCSS, shadcn, MUI, plain CSS, whatever).
+- The project's visual language and constraints. Reuse only what helps the scratch artifact answer the question.
 - A clear exported component name, e.g. `VariantA`, `VariantB`, `VariantC`.
 
 Variants must be **structurally different**: different layout, different information hierarchy, different primary affordance, not just different colours. Three slightly-tweaked card grids isn't a UI prototype, it's wallpaper. If two drafts come out too similar, redo one with explicit "do not use a card grid" guidance.
 
 ### 3. Wire them together
 
-Create a single switcher component on the route:
+Create a single switcher component in the scratch prototype:
 
 ```tsx
 // pseudo-code, adapt to the project's framework
-const variant = searchParams.get('variant') ?? 'A';
+const variant = new URLSearchParams(location.search).get('variant') ?? 'A';
 return (
   <>
     {variant === 'A' && <VariantA {...data} />}
@@ -70,9 +70,9 @@ return (
 );
 ```
 
-For sub-shape A (existing page): keep all the existing data fetching above the switcher; only the rendered subtree changes per variant.
+For sub-shape A (existing page context): simulate the relevant data and keep it shared above the switcher; only the rendered subtree changes per variant.
 
-For sub-shape B (new page): the throwaway route under `/prototype/<name>` mounts the same switcher.
+For sub-shape B (new surface): the isolated scratch page mounts the same switcher.
 
 ### 4. Build the floating switcher
 
@@ -84,25 +84,25 @@ A small fixed-position bar at the bottom-centre of the screen with three pieces:
 
 Behaviour:
 
-- Clicking an arrow updates the URL search param (use the framework's router, e.g. `router.replace` on Next, `navigate` on React Router, etc) so the variant is shareable and reload-stable.
+- Clicking an arrow updates the URL search param so the variant is shareable and reload-stable.
 - Keyboard: `←` and `→` arrow keys also cycle. Don't intercept arrow keys when an `<input>`, `<textarea>`, or `[contenteditable]` is focused.
 - Visually distinct from the page (e.g. high-contrast pill, subtle shadow) so it's obviously not part of the design being evaluated.
-- Hidden in production builds: gate on `process.env.NODE_ENV !== 'production'` or an equivalent check, so a stray prototype merge can't ship the bar to users.
+- Kept outside production source, so the switcher cannot ship to users.
 
-Put the switcher in a single shared component so both sub-shapes can reuse it. Locate it wherever shared UI lives in the project.
+Put the switcher in one component within the scratch prototype so both shapes can reuse it.
 
 ### 5. Hand it over
 
-Surface the URL (and the `?variant=` keys). The user will flip through whenever they get to it. The interesting feedback is usually **"I want the header from B with the sidebar from C"**, which is the actual design they want.
+Surface the run command and the `?variant=` keys. The user can flip through each option. The interesting feedback is often a combination of parts from different variants, which becomes the design to build.
 
 ### 6. Capture the answer and clean up
 
-Once a variant has won, capture the answer (which variant and why), then capture the prototype the way the [SKILL](SKILL.md) describes. Fold the winner into the real code and move the rest onto the throwaway branch, not into main:
+Once a variant has won, capture the answer (which variant and why) in the implementation issue or design note using **technical-writing**. Keep the complete prototype on a throwaway branch or in isolated scratch storage. Rebuild the winner properly in production code:
 
-- **Sub-shape A**: fold the winner into the existing page; drop the losing variants and the switcher from main.
-- **Sub-shape B**: promote the winning variant to a real route; drop the throwaway route and the switcher from main.
+- **Sub-shape A**: implement the winner in the existing page. Do not copy prototype scaffolding or the switcher.
+- **Sub-shape B**: implement the winning surface as a real route. Do not promote the throwaway route or switcher.
 
-The full set of variants is the primary source, so it lands on the throwaway branch, not the bin, since variant components and the switcher left in the main branch rot fast and confuse the next reader.
+The full set of variants is the primary source. Keep it out of the production branch, where throwaway components and switchers would mislead future readers.
 
 ## Anti-patterns
 
