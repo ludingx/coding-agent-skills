@@ -6,68 +6,43 @@ disable-model-invocation: true
 
 # Arena
 
-Fan out N parallel attempts at the same task. Read every candidate end to end. Pick the strongest as the base. Graft the best ideas from the others into it. Verify the synthesized result.
-
-Spawn subagents with your agent's subagent tool: the `Agent` tool in Claude Code, the `task` tool in OpenCode.
-
-## Start
-
-Open a todo list with one entry per phase before launching anything.
-
-1. Frame
-2. Fan out
-3. Cross-judge
-4. Pick
-5. Graft
-6. Verify
+Open a todolist with one entry per phase (Frame, Fan out, Cross-judge, Pick, Graft, Verify) before launching anything.
 
 ## Phase A: Frame
 
-The N candidates will receive the same prompt, so the prompt is the contract.
+Every candidate gets the same prompt, so the prompt is the contract.
 
 1. State the artifact each candidate is producing.
-2. Derive the rubric. State what success looks like for *this* task, then turn it into 3-6 concrete gradeable criteria. The rubric is the picker's tool in Phase D. Candidates only see the task.
-3. Pick the runners. Runners are `general-purpose` subagents in Claude Code and `general` subagents in OpenCode. In OpenCode, read `~/.config/coding-agent-skills/models.md` if it exists and run one runner per entry on the `arena runners` line under `## opencode`. A caller such as **architect** may name its own line instead. When the file or line is missing, default to two runners on `litellm/claude-opus-5-5#high` and `litellm/openai.gpt-6-luna#high`. Omit `model` for an `inherit-parent` entry. If the call rejects an entry, run that seat on the default for its family (`claude-*` or `openai.*`) and say so. Spawn more runners when the arena covers multiple design directions, cycling through the list.
-4. Assign output paths. Each candidate writes to its own location (a git worktree where possible, per the **using-git-worktrees** skill, otherwise a scratch directory outside the repo such as `/tmp/arena-<slug>/candidate-<n>/`), per the **principle-separate-before-serializing-shared-state** skill.
+2. Derive the rubric, 3-6 concrete gradeable criteria for what success looks like on *this* task. It is the picker's tool in Phase D. Candidates only see the task.
+3. Pick the runners. Runners are `general-purpose` subagents in Claude Code (the `Agent` tool) and `general` subagents in OpenCode (the `task` tool). In OpenCode, use the `arena runners` line under `## opencode` in `~/.config/coding-agent-skills/models.md`, one runner per entry. If the file or that line is missing, default to one each on `litellm/claude-opus-5-5#high` and `litellm/openai.gpt-6-luna#high`. An `inherit-parent` entry in this line or the cross-judge line means the parent model, so omit `model` for it. If the call rejects a configured entry, run that seat on its family's default and say so. With no family match, use `litellm/claude-opus-5-5#high`. If it rejects a default too, omit `model` so that seat runs on the parent model, and say so. On other agents, spread the seats across model families where the subagent tool allows it. Otherwise run every seat on the parent model and say so. Spawn more runners when the arena covers multiple design directions. Use the same model N times when the work is generation-bound rather than judgment-sensitive.
+4. Give each candidate its own output location (a git worktree where possible, otherwise `/tmp/arena-<slug>/candidate-<n>/`), per the **separate-before-serializing-shared-state** principle skill.
 
 ## Phase B: Fan out
 
-Spawn all N subagents in one message so they run in parallel. Run them in the background where your agent supports it. Give each the task, the path to the shared grounding, its own output path, and instructions to produce both the artifact and a short rationale.
+Spawn all N subagents in one message so they run in parallel, each with the task, the path to the shared grounding, its own output path, and instructions to produce the artifact and a short rationale naming the alternatives it considered and what it rejected.
 
-Each rationale names the alternatives the candidate considered and what it rejected.
-
-If a candidate fails to produce output, proceed with N-1 and note the dropout in the synthesis record.
+If a candidate produces no output, proceed with N-1 and note the dropout.
 
 ## Phase C: Cross-judge
 
-After all Phase B candidates complete, spawn one judge subagent (`general-purpose` in Claude Code, `general` in OpenCode) and tell it not to edit files. In OpenCode, pick its model from the `arena cross-judge pool` line under `## opencode`, choosing an entry whose family differs from the parent session's model when one exists. When the file or line is missing, the pool is `litellm/claude-opus-5-5#high` and `litellm/openai.gpt-6-luna#high`. It sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with the parent's reading in Phase D, not with the candidates themselves. Don't spawn the judge while candidates are still writing.
+After all Phase B candidates complete, choose one model from the `arena cross-judge pool` line under `## opencode` in `~/.config/coding-agent-skills/models.md`. If the file or that line is missing, choose from `litellm/claude-opus-5-5#high` and `litellm/openai.gpt-6-luna#high`. Prefer a different model family from the parent's. Spawn one judge subagent on that model and tell it not to edit files. It sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with your reading in Phase D. Don't spawn it while candidates are still writing.
 
 ## Phase D: Pick a base
 
-Read every candidate end to end before picking.
+Read every candidate end to end before picking. Score each against the rubric criterion by criterion, not on holistic feel, and compare with the cross-judge. Agreement on the base confirms the pick. Disagreement means one of you is biased or the rubric was ambiguous. Read both rationales before deciding.
 
-Score each candidate against the rubric criterion by criterion, not on holistic feel. Compare against the cross-judge. Agreement on the base confirms the pick. Disagreement means one of you is biased or the rubric was ambiguous. Read both rationales before deciding.
-
-Pick the base on which a future maintainer can extend the artifact most easily without breaking invariants. Prefer the cleaner boundary or smaller API when two feel tied, per the **principle-laziness-protocol** skill.
-
-Record the pick and the reason in a short synthesis note alongside the base artifact, including the cross-judge's verdict. Write this durable design artifact with **technical-writing**.
+Pick the base a future maintainer can extend most easily without breaking invariants. When two feel tied, prefer the cleaner boundary or smaller API, per the Laziness Protocol.
 
 ## Phase E: Graft
 
-Walk each losing candidate once more and identify what is worth porting into the base. The signal is usually one or two things per candidate, not most of it.
+Walk each losing candidate once more for what is worth porting into the base, usually one or two things per candidate, not most of it. Fold each graft in by hand, per the **redesign-from-first-principles** principle skill, so the result stays coherent under one mental model. Don't paste mechanically.
 
-Fold each graft in by hand, per the **principle-redesign-from-first-principles** skill. Don't paste mechanically. The result has to remain coherent under one mental model.
-
-Record what was grafted, from which candidate, and what was rejected and why.
-
-When N candidates converge on the same shape, that is a strong agreement signal. Note the convergence in the record and ship the consensus shape. No graft is needed. When N candidates wildly diverge, Phase A was under-specified. Reframe and re-run rather than averaging the divergence.
+If the candidates converge on one shape, that is strong agreement. Note it and ship the consensus shape. No graft is needed. If they wildly diverge, Phase A was under-specified. Reframe and re-run rather than averaging the divergence.
 
 ## Phase F: Verify
 
-The synthesized artifact has to hold up under the same scrutiny as any other output, per the **principle-prove-it-works** skill.
-
-If verification surfaces a problem the arena did not catch, either Phase A was wrong (re-frame and re-run) or one candidate caught it and you missed the graft (go back to Phase E). Don't paper over.
+Verify the synthesized artifact like any other output, per the **prove-it-works** principle skill. If verification finds a problem the arena missed, either Phase A was wrong (re-frame and re-run) or a candidate caught it and you missed the graft (go back to Phase E). Don't paper over it.
 
 ## Outputs
 
-One synthesized artifact. One short synthesis note alongside, naming the base, the grafts (with source candidate), the rejections, the dropouts if any, and the verification result.
+One synthesized artifact, with a short synthesis note alongside naming the base and why, the cross-judge's verdict, each graft with its source candidate, what was rejected and why, any convergence or dropouts, and the verification result.

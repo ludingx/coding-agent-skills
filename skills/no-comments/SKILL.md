@@ -1,36 +1,24 @@
 ---
 name: no-comments
-description: Review comments and lint suppressions in the current diff. Remove narration and unsupported explanations, keep only comments that document a real external constraint or public contract, and report larger code changes separately.
+description: "Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints."
+disable-model-invocation: true
 ---
 
-# Review comments
+# No comments
 
-Review comments and lint suppressions in the caller's files or the current diff against the PR base. Include staged and unstaged changes. Do not review unrelated code or silently broaden the scope.
+Spawn Comment Sicko. Act on accepted findings.
 
-## Classify each comment
+Defer to Comment Sicko's fresh perspective.
 
-Remove comments that:
+## Scope
 
-- Restate what the code directly shows.
-- Describe a temporary workaround without a current, verifiable reason.
-- Explain internal behavior that clearer names, types, or structure can express.
-- Are commented-out code, banners, or stale instructions.
-- Use words such as "IMPORTANT" or "do not remove" without evidence for an exception.
+Use the caller's files or diff. Otherwise use the current diff against the base branch, default `main`, including the working tree.
 
-Keep a comment only when it records:
+## Steps
 
-- A legal or license requirement.
-- A non-obvious constraint imposed by an external dependency, platform, vendor, or protocol that the project cannot change.
-- A public API contract that the code cannot express.
-- A concrete issue or design reference that explains a constraint the code cannot express.
-- A formatter directive required by the configured tooling.
-
-Treat `eslint-disable`, `@ts-ignore`, `@ts-expect-error`, and similar suppressions as comments that need proof. Check the named rule and determine whether it protects correctness or safety. Flag unsupported suppressions; do not delete them when doing so requires an application-code change outside the comment-only scope.
-
-## Apply the review
-
-Delete clear narration and stale comments in scope. Do not rewrite application logic as part of this review. If a comment reveals that names, types, or structure should change, report the exact symbol and the smallest structural fix that could remove the comment. Do not invent a constraint or keep a comment because it might be useful later.
-
-If an independent reviewer is available, ask it to inspect the same scoped diff for missed or misclassified comments before applying non-trivial deletions. Do not require a particular agent, tool, or slash command. Without an independent reviewer, inspect each comment's surrounding code and state that the review was not independent.
-
-After edits, inspect the comment diff again. Report files reviewed, comments deleted, comments kept with their evidence, unsupported suppressions, suggested structural changes, and any limits on the review. Do not claim a fresh independent review if you performed the review yourself.
+1. Spawn the Comment Sicko subagent: `coding-agent-skills:comment-sicko` through the `Agent` tool in Claude Code, `comment-sicko` through the `task` tool in OpenCode. Pass the scope. Do not restate its rules.
+2. Inspect its report and diff. Reject application-code edits, scope escapes, exception-protected deletions, misstated `MUST KILL` reasons, and flags that treat kept intentional code as guilty. Reshape flags on our-code surprises stay actionable. Do not restore those comments. A keep survives only with proof it is about something we cannot change. Audit missed scoped lint and TypeScript suppressions. Correctness or safety suppressions stay actionable `MUST KILL`s. Restore deletions only with exact exceptions and scoped proof. Before accepting thin `IMPORTANT` or `do not remove` kills or keeps, run `/how` or `/why` on their symbol. If a kill is ambiguous, do not restore. If a keep is refuted or still ambiguous, delete it. Revert and rerun one rejected report with the failure named. Reject a second, report it open, and fail `/no-comments`.
+3. Fix trivial accepted flags directly by deleting a dead path, dropping a parameter, or using the real API. If any fix needs a shape, run `/architect` once for the accepted set and surrounding code. Stop at the sketch. Architect shapes. Step 4 implements.
+4. Implement the smallest root-cause fix in scope. Remove every named workaround. If the root cause is out of scope, land the smallest in-scope fix and report the rest open. The **principle-fix-root-causes** and **principle-redesign-from-first-principles** skills guide intent only. Neither authorizes widening the fence nor fixing instances outside it. Never bolt on symptom guards.
+5. Constraint comments say `do not remove`, `do not change wording`, or `talk to X before changing`. Leave keeps about things we cannot change. Offer the cheapest in-scope type, runtime, test, or CI lint. Wait for interactive approval. Unattended and eval require caller pre-approval. If approved, encode then delete. Otherwise delete, report the constraint open, and sketch out-of-scope work.
+6. Report the deletion count, restored comments, reruns, architect sketch, fixes, encoding offers, encodings, unenforced constraints, and other open work.

@@ -1,36 +1,39 @@
-# Create an item
+# Create a note
 
-A user can create and save an item, cancel an unfinished draft, and confirm that a saved item persists.
+Create note lets a user save a titled note from the browser or CLI, cancel an unfinished draft, and confirm the saved note from a second user-facing view.
 
 ## Sub-features
 
-- `create-open` opens a blank editor.
-- `create-save` saves the item's fields.
-- `create-cancel` discards an unfinished draft.
-- `create-persist` confirms the saved item in a second view.
+- `create-open` opens a blank editor from each browser entry point.
+- `create-save` persists a title and body.
+- `create-cancel` discards an unfinished browser draft.
+- `create-cli` creates the same note shape from the terminal.
 
 ## How to get to it (user POV)
 
-- Select the app's create-item action.
-- Use any documented keyboard shortcut.
-- Use a documented CLI create command, if the app provides one.
+- Choose the `New note` button in the browser toolbar.
+- Press `n` in the browser while focus is outside an editable field.
+- Run `notes create --title <title> --body <body>` in a terminal.
 
-## Driving it with <harness>
+## Driving it with control-notes
 
 Preconditions:
 
-- The isolated app instance passes its health check.
-- No item with the chosen unique test title exists.
+- Notes is healthy at `http://127.0.0.1:4173`.
+- No note is titled `Release checklist`.
+- `control-notes doctor` reports the expected URL and disposable data directory.
 
-- **Open editor.** Use the app's create action. Confirm the editor and expected fields are visible.
-- **Enter data.** Fill required fields with a unique title and known body. Confirm the save action is enabled.
-- **Save.** Submit the item. Confirm the app reports success and shows the expected title.
-- **Confirm persistence.** Navigate to a second user-facing list or detail view and confirm the saved values there.
-- **Cancel.** Start a separate draft, enter data, cancel, then confirm no item with that unique title exists.
-- **Capture proof.** Save the command output, accessibility snapshot, screenshot, or other appropriate artifact under the verification skill's named artifact directory.
+- **Open editor.** Choose `New note`. Run `control-notes browser click --role button --name "New note"`. A form named `Note editor` appears with focus in the `Title` textbox.
+- **Enter content.** Type the title and body. Run `control-notes browser fill --role textbox --name "Title" --value "Release checklist"` and `control-notes browser fill --role textbox --name "Body" --value "Tag and publish"`. The `Save note` button becomes enabled.
+- **Save note.** Choose `Save note`. Run `control-notes browser click --role button --name "Save note"`. A status named `Note saved` appears and the heading reads `Release checklist`.
+- **Confirm persistence.** Return to the note list and reopen the note. Run `control-notes browser click --role link --name "All notes"` and `control-notes browser click --role link --name "Release checklist"`. The editor shows both saved values.
+- **Cancel draft.** Open a new note, enter `Discard me`, and choose `Cancel`. Run `control-notes browser click --role button --name "New note"`, `control-notes browser fill --role textbox --name "Title" --value "Discard me"`, and `control-notes browser click --role button --name "Cancel"`. The note list returns and has no `Discard me` link.
+- **CLI entry.** Create a second note. Run `control-notes cli -- notes create --title "CLI note" --body "Created from terminal" --format json`. Exit code `0` and stdout contain the new note ID and title.
+- **Proof.** Reopen both saved notes from `All notes`. Run `control-notes browser snapshot --aria --path artifacts/create-note/list.aria.txt` and `control-notes browser screenshot --path artifacts/create-note/list.png`. The artifacts show `Release checklist` and `CLI note`.
 
 ## Gotchas
 
-- A success toast alone does not prove persistence.
-- Use unique values so seeded data cannot make the check pass accidentally.
-- Remove test records during cleanup; preserve the proof artifacts.
+- Pressing `n` while a textbox has focus types the character instead of opening a new editor.
+- Titles are trimmed on save. Assert the rendered title, not the draft input value.
+- A save status alone is insufficient proof. Reopen the note from the list.
+- Remove `Release checklist` and `CLI note` during fixture cleanup, but retain their proof artifacts.

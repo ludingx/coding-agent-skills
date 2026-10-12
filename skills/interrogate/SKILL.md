@@ -1,117 +1,74 @@
 ---
 name: interrogate
-description: "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Two independent model reviewers challenge a change from different angles, then the lead synthesizes a verdict."
+description: "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Multiple LLM reviewers challenge changes from independent angles."
 disable-model-invocation: true
 ---
 
 # Interrogate
 
-Spawn two independent reviewers to adversarially review code changes. Both receive the same prompt and rubric and work without seeing the other's findings. The adversarial signal comes from model diversity, not assigned personas.
+Spawn one reviewer per configured model to adversarially review code changes. The adversarial signal comes from model diversity, not assigned personas. The deliverable is a synthesized verdict. Do NOT auto-apply changes.
 
-The deliverable is a synthesized verdict. Do not automatically apply changes.
+## Step 1, Scope
 
-Spawn subagents with the current agent's subagent tool: `Agent` in Claude Code or `task` in OpenCode.
+Identify what to review from context:
 
-## Step 1. Determine Scope
-
-Identify the review scope from context:
-
-- If the user points to specific files or a diff, use those.
+- If the user points at specific files or a diff, use that.
 - If on a feature branch, run `git diff main...HEAD` (or the appropriate base branch) for the full changeset.
 - If the user's message references recent work, gather the relevant files.
 
-Package the diff (or file contents) plus surrounding context reviewers need to understand the code.
+Package the diff or file contents with any surrounding context files the reviewers need to understand the code.
 
-## Step 2. State Intent
+## Step 2, Intent
 
-Before spawning reviewers, state the intent explicitly. Derive it from:
+Before spawning reviewers, state the intent in one clear paragraph from the user's message, commit messages, the PR description if one exists, and the code. If you're unsure about the intent, ask the user before proceeding.
 
-- The user's message
-- Commit messages
-- The PR description, if one exists
-- The code itself
+## Step 3, Spawn Reviewers
 
-Write one clear paragraph. If the intent is unclear, ask the user before proceeding.
+Launch all reviewers in a single message so they run in parallel. In OpenCode, spawn one per entry on the `interrogate reviewers` line under `## opencode` in `~/.config/coding-agent-skills/models.md`, labeled Reviewer A, B, and so on to match the entry count. If the file or that line is missing, use the table defaults.
 
-## Step 3. Spawn Reviewers
+| Subagent | Default model |
+|----------|---------------|
+| Reviewer A | `litellm/claude-opus-5-5#high` |
+| Reviewer B | `litellm/openai.gpt-6-luna#high` |
 
-Launch both reviewers in one message so they run in parallel. In OpenCode, read `~/.config/coding-agent-skills/models.md` if it exists. The `interrogate reviewers` line under `## opencode` lists Reviewer A's model, then Reviewer B's. When the file or line is missing, use the table defaults:
+Each reviewer is a `general-purpose` subagent in Claude Code (the `Agent` tool) or a `general` subagent in OpenCode (the `task` tool). Tell it not to edit files. Set `model` to its configured entry, or its table default when there is no configured line. Omit `model` for an `inherit-parent` entry, so that reviewer runs on the parent model. On other agents, put the reviewers on different model families where the subagent tool allows it. Otherwise run them on the parent model and say so.
 
-| Reviewer | Requested model | OpenCode default |
-|---|---|---|
-| Reviewer A | `openai.gpt-6-luna` | `litellm/openai.gpt-6-luna#high` |
-| Reviewer B | `fireworks-deepseek-v4p1-flash` | `litellm/fireworks-deepseek-v4p1-flash#high` |
+If the call rejects a configured entry, run that reviewer on its table default and say so. A reviewer past the table's rows falls back to Reviewer A's default. If it rejects a table default, omit `model` so that reviewer runs on the parent model, and say so. Do not block the review on the model issue, and do not silently drop a reviewer. Never treat an `inherit-parent` entry as a rejected model or apply either fallback to it.
 
-For each reviewer:
+Read `references/reviewer-prompt.md` and fill in the same template for every reviewer with the stated intent, the diff or file contents, the rubric from `references/rubric.md`, and the code-quality lens from `references/code-quality-review.md`.
 
-- Use `general-purpose` in Claude Code or `general` in OpenCode.
-- In OpenCode, set the `task` model to the reviewer's configured entry, or its table default. Omit `model` only for an `inherit-parent` entry. Otherwise do not rely on the default subagent model or leave the model unset.
-- On other agents, request the listed model when the subagent tool supports it. If a model is rejected, use the closest valid model from the same family and reasoning tier, and report the fallback. Do not silently drop a reviewer or substitute a different model family.
-- Tell it not to edit files.
+## Step 4, Synthesize
 
-If a requested model is unavailable, report which assignment failed and what fallback ran. Continue with an available reviewer, but label the verdict incomplete if both reviewers did not run.
+As results come back, build a unified picture. Parse every reviewer's findings. Merge findings that describe the same issue differently, and note which models raised each one. Findings two or more models raised independently are the highest signal. Read a lone model's finding, but weight it accordingly. Note disagreements. If one model flags something and another explicitly says the opposite, that is context for the verdict.
 
-Read `references/reviewer-prompt.md` and fill in the template with:
+## Step 5, Lead Judgment
 
-1. The stated intent
-2. The diff or file contents
-3. The review rubric from `references/rubric.md`
-4. The code-quality lens from `references/code-quality-review.md`
+You are the lead reviewer, a pragmatic senior engineer, not a neutral aggregator. Read `references/lead-judgment.md` for the full framework. Put every finding in one of four buckets, with the model(s) that raised it and a one-line rationale.
 
-Send the same filled template to both reviewers.
-
-## Step 4. Synthesize
-
-When results return, build a unified picture:
-
-1. Parse all reviewer findings.
-2. Identify consensus. Findings raised independently by both reviewers are the highest signal.
-3. Read lone-reviewer findings too, but weight them accordingly. Correctness and security findings deserve scrutiny even when only one reviewer raises them.
-4. Deduplicate findings and note which reviewers raised each one.
-5. Note disagreements. If one reviewer flags something and the other explicitly says the opposite, include that context in the verdict.
-
-## Step 5. Lead Judgment
-
-You are the lead reviewer, a pragmatic senior engineer, not a neutral aggregator. Read `references/lead-judgment.md` in full and apply its framework.
-
-Categorize every finding:
-
-- **Act on**: Real issues affecting correctness, security, or maintainability that should block the change.
-- **Consider**: Legitimate points where the tradeoff is uncertain and worth the user's attention.
-- **Noted**: Valid but not actionable now, for example because it is low impact or context dependent.
-- **Dismissed**: Wrong, nitpicky, or missing context. Briefly explain why.
-
-For each finding, include the reviewer(s) who raised it, its category, and a one-line reason for the categorization.
+- **Act on**. Real issues affecting correctness, security, or maintainability given the actual goals. They would block a real PR.
+- **Consider**. Legitimate, but you're not sure they outweigh the cost of addressing them now. Worth the user's attention.
+- **Noted**. Technically valid but not actionable. Context-dependent, premature optimization, or low-impact at this stage.
+- **Dismissed**. Wrong, nitpicky, or missing context, with a brief reason.
 
 ## Output Format
 
-Present the verdict in this structure:
-
 ### Intent
-
-[The stated intent paragraph from Step 2]
+> [The stated intent paragraph from Step 2]
 
 ### Reviewers
-
-- Reviewer A: [model name], [N findings]
-- Reviewer B: [model name], [N findings]
+- Reviewer [label]: [model name], [N findings] (one bullet per reviewer)
 
 ### Act On
-
-[Findings to address. For each: description, reviewers who raised it, and why it matters.]
+[Each: description, which models raised it, why it matters.]
 
 ### Consider
-
-[Findings worth thinking about. For each: description, reviewers who raised it, and the tradeoff involved.]
+[Each: description, which models raised it, the tradeoff.]
 
 ### Noted
-
-[Valid but low-priority findings.]
+[Brief list.]
 
 ### Dismissed
-
-[Rejected findings with a brief rationale.]
+[Each with a brief rationale.]
 
 ### Agreement Map
-
-[Where reviewers agreed or diverged, and what that pattern tells us.]
+[Where models agreed and diverged, and what that pattern tells us.]

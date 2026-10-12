@@ -1,10 +1,10 @@
 # TypeScript patterns
 
-Code examples for each rule in `SKILL.md`. The underlying principles are language-agnostic. See **principle-type-system-discipline** and **principle-boundary-discipline**.
+Code examples for each rule in `SKILL.md`. The underlying principles are language-agnostic. See the **type-system-discipline** and **boundary-discipline** principle skills.
 
 ## Branded types
 
-Brand semantic primitives only when two values with the same underlying type could be confused. Validate once at the boundary. Downstream code trusts the type.
+Brand primitives so they can't be mixed up. Validate once at the boundary. Downstream code trusts the type.
 
 ```ts
 type AgentId = string & { readonly __brand: "AgentId" };
@@ -19,7 +19,7 @@ function focusAgent(id: AgentId): void {
 }
 ```
 
-Follow the repository's existing brand convention. Do not introduce a second convention.
+Match the `readonly __brand: 'X'` shape. Don't invent a new convention.
 
 ## Discriminated unions
 
@@ -321,4 +321,4 @@ openFile({
 });
 ```
 
-Skip object wrappers on hot paths such as per-frame rendering, tokenizers, parsers, or other tight loops where allocation cost matters.
+Skip on hot paths: per-frame render, tokenizers, parsers, anything in a tight loop where the allocation cost matters.

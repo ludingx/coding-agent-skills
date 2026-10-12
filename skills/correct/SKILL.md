@@ -1,30 +1,32 @@
 ---
 name: correct
-description: Find recurring mistakes agents make in this repository and fix them at the strongest practical level, from architecture and types through checks and tests. Use for /correct or when asked to stop repeated mistakes.
+description: "Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for /correct."
 disable-model-invocation: true
 ---
 
 # Correct
 
-When agents are repeatedly corrected for the same mistake, change the repository so the next agent is less likely to repeat it. A prompt reminder is not a durable fix when the repository can enforce the rule.
+The operator keeps correcting agents in this repo for the same mistakes. Change the repo so the next agent can't make them.
 
-Assume contributors see only files they opened, copy the nearest example, and take the shortest path that compiles. Make a locally plausible change correct across the repository.
+Assume every contributor is an agent that sees only the files it opened, copies the nearest example, and takes the shortest path that compiles. Design the repo so a change that looks right from one file is right for the whole repo.
 
-## Find mistake classes
+## Find the mistake classes
 
-Read recent commits, reverts, review comments, agent instructions, and workaround comments. Group mistakes into classes. Treat a class as recurring only when there is evidence it happened more than once.
+First, read recent commits, reverts, review comments, agent instruction files, and comments that explain workarounds. Group the mistakes into classes. A class counts once it has happened twice.
 
-## Fix each class at the highest useful level
+## Fix each class at the highest level that works
 
-1. **Eliminate it with architecture.** Give each piece of state one owner and each task one supported path. Hide internals so the wrong import fails. Replace hand-synchronized lists with one source of truth. Delete obsolete paths and dead code that invite copying.
-2. **Make invalid states unrepresentable.** Strengthen types and APIs, applying **principle-type-system-discipline**. If the bad change still compiles, add a lint or CI check whose error names the supported file, type, or function. If the pattern is already widespread, fail only when a change adds more.
-3. **Test behavior.** Fix or delete tests that would still pass if the functions they call returned nothing.
-4. **Write docs or agent rules last, and only for judgment calls.** Instructions are not enforcement if a contributor can skip them.
+1. **Eliminate it with architecture.** Give each piece of state one owner and each task one supported way. Hide internals so the wrong import fails. Replace hand-synced lists with one source of truth. Delete old ways and dead code an agent would copy.
+2. **Enforce it with types so the bad state can't be written.** If bad code still compiles, add a lint or CI check whose error names the file, type, or function to use instead. If the pattern is already common, fail only when a change adds more.
+3. **Test the behavior.** Fix or delete any test that would still pass if every function it calls returned nothing.
+4. **Write docs or agent rules last, only for judgment calls.** Nothing fails when an agent skips them.
 
-## Prove and prevent recurrence
+## Fix and prove
 
-Fix the most frequent mistake classes first. For each new check, prove it fails on a real past mistake, then run it locally and in CI when CI supports it. Exceptions need a reason, an expiry, and an owner.
+Then fix the most frequent classes now, one commit each. Prove each new check fails on a real past mistake. Run the same command locally and in CI. Exceptions go on the offending line with a reason, an expiry date, and a human's approval.
 
-Keep a table in the relevant `AGENTS.md` or contributor instructions pairing each rule with its enforcement. When corrected, fix the mistake and add or strengthen enforcement. If a rule already exists but is unenforced, treat that as a repeat and address it at the highest useful level. Remove rules once the mistake cannot occur.
+## Keep the rule table
 
-**Reply:** each mistake class and its evidence, the enforcement level chosen, and why a stronger level was not practical.
+Last, keep a table in the agent instruction file that pairs each rule with what enforces it. When the operator corrects you, fix the mistake and add the rule. If the rule was already there and nothing enforces it, that's a repeat, so fix it at the highest level in the same change. Drop a rule once its mistake can't happen.
+
+**Reply:** each class with its evidence, the level you picked, and why a higher level didn't work.
