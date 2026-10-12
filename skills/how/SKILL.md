@@ -8,7 +8,14 @@ disable-model-invocation: true
 
 Explore the codebase to answer "how does X work?" questions. Produce architectural explanations at the level of a senior engineer onboarding onto a subsystem, enough to build a working mental model, not so much that it reads like annotated source code.
 
-Spawn subagents with your agent's subagent tool: the `Agent` tool in Claude Code, the `task` tool in OpenCode. In OpenCode, configure explorers to use `openai.gpt-6-luna`; on other agents, use a fast, cheap model where configurable. The explainer runs on your strongest model. OpenCode's `task` tool uses each subagent's configured model.
+Spawn subagents with your agent's subagent tool: the `Agent` tool in Claude Code, the `task` tool in OpenCode. On other agents, use a fast, cheap model for explorers where configurable. The explainer runs on your strongest model.
+
+**Model routing (OpenCode).** Before spawning, read `~/.config/coding-agent-skills/models.md` if it exists. Set each subagent call's `model` to the value of its role line under `## opencode`, or to the default below when the file or line is missing. Omit `model` when the value is `inherit-parent`. If the call rejects the model, use the default and say so.
+
+| Role | Line | Default |
+|---|---|---|
+| Explorers | `how explorer` | `litellm/openai.gpt-6-luna#high` |
+| Explainer | `how explainer` | `litellm/claude-opus-5-5#high` |
 
 ## Step 1. Assess Complexity
 

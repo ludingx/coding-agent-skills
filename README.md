@@ -71,13 +71,13 @@ Skills are not slash commands in OpenCode. Browse available skills with `/skills
 
 ### dl-mode
 
-Link the `/dl-mode` command and the `dl-agent` agent into the global OpenCode config:
+To make the `dl-agent` subagent available globally, link its definition into OpenCode's global agent directory:
 
 ```bash
-mkdir -p ~/.config/opencode/commands ~/.config/opencode/agents && ln -s {repo_absolute_path}/.opencode/commands/dl-mode.md ~/.config/opencode/commands/dl-mode.md && ln -s {repo_absolute_path}/.opencode/agents/dl-agent.md ~/.config/opencode/agents/dl-agent.md
+mkdir -p ~/.config/opencode/agents && ln -s {repo_absolute_path}/.opencode/agents/dl-agent.md ~/.config/opencode/agents/dl-agent.md
 ```
 
-Run `/dl-mode <task>`. dl-mode stays on for the rest of the session. `dl-agent` is the subagent dl-mode spawns for playbook steps.
+Invoke dl-mode by asking OpenCode to use the `dl-mode` skill for your task. dl-mode stays on for the rest of the session. `dl-agent` is the subagent dl-mode spawns for playbook steps.
 
 </details>
 
@@ -125,7 +125,7 @@ The skills support different stages of software engineering work. Use the ones t
 - [`to-tickets`](./skills/to-tickets/SKILL.md): Break work into implementation tickets.
 - [`bro`](./skills/bro/SKILL.md): Restate the last message in plain language, without jargon.
 - [`unslop`](./skills/unslop/SKILL.md): Cut AI writing patterns and jargon from text.
-- [`reflect`](./skills/reflect/SKILL.md): Review the session transcript with three parallel reviewers and turn durable learnings into skill edits you approve.
+- [`reflect`](./skills/reflect/SKILL.md): Review the session transcript with parallel reviewers and turn durable learnings into skill edits you approve.
 - [`tdd`](./skills/tdd/SKILL.md): Write a failing regression test before fixing a bug, when the test path is clear and cheap.
 - [`architect`](./skills/architect/SKILL.md): Explore types, signatures, and module boundaries before implementing a change.
 - [`arena`](./skills/arena/SKILL.md): Compare parallel implementations, choose a base, and graft in the strongest ideas.
@@ -134,12 +134,25 @@ The skills support different stages of software engineering work. Use the ones t
 - [`why`](./skills/why/SKILL.md): Investigate why code was shaped a certain way, using available evidence and explicit confidence levels.
 - [`teach`](./skills/teach/SKILL.md): Explain what something is, how it works, and why in one clear account.
 - [`recall`](./skills/recall/SKILL.md): Reconstruct recent working context and return a concise brief on current status and next steps.
+- [`ketchup`](./skills/ketchup/SKILL.md): Catch up on this chat since the user's last message and summarize outstanding decisions.
+- [`blast-radius`](./skills/blast-radius/SKILL.md): Investigate what a change could break beyond its diff and prove the key safety fact.
+- [`correct`](./skills/correct/SKILL.md): Turn recurring agent mistakes into structural fixes, checks, and tests.
+- [`create-verification-skill`](./skills/create-verification-skill/SKILL.md): Create a project-local skill and feature map for driving and verifying the real app.
+- [`maintain-verification-skill`](./skills/maintain-verification-skill/SKILL.md): Audit and update an existing app verification skill and feature map.
+- [`show-me-your-work`](./skills/show-me-your-work/SKILL.md): Keep a reviewable decision trail for long-running or unattended work.
+- [`swarm`](./skills/swarm/SKILL.md): Run parallel subagents across independent work and return one evidence-based report.
+- [`figure-it-out`](./skills/figure-it-out/SKILL.md): Design and run a rigorous workflow when no existing playbook fits.
+- [`typescript-best-practices`](./skills/typescript-best-practices/SKILL.md): Apply TypeScript-specific type-system practices to `.ts` and `.tsx` files.
+- [`setup-models`](./skills/setup-models/SKILL.md): Choose which model each subagent role uses, scaled to a reasoning budget. OpenCode only for now.
 
 ### Model-invoked skills
 
 - [`prototype`](./skills/prototype/SKILL.md): Build an isolated, throwaway UI or logic prototype to settle a design question.
 - [`principle-experience-first`](./skills/principle-experience-first/SKILL.md): Choose the best experience for the people who use and maintain the result.
+- [`principle-attack-the-premise`](./skills/principle-attack-the-premise/SKILL.md): Question a premise shared by multiple failed fixes before adding another fix based on it.
 - [`principle-model-the-domain`](./skills/principle-model-the-domain/SKILL.md): Choose data structures that encode the domain before implementing logic.
+- [`principle-type-system-discipline`](./skills/principle-type-system-discipline/SKILL.md): Design types to rule out invalid states, distinguish domain values, and check variants exhaustively.
+- [`principle-migrate-callers-then-delete-legacy-apis`](./skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md): Migrate internal callers and delete obsolete APIs in the same change when compatibility is not required.
 - [`principle-explain-the-number`](./skills/principle-explain-the-number/SKILL.md): Check what a measured number actually establishes before trusting or reporting it.
 - [`principle-guard-the-context-window`](./skills/principle-guard-the-context-window/SKILL.md): Keep large payloads out of the main context and return concise findings.
 - [`principle-never-block-on-the-human`](./skills/principle-never-block-on-the-human/SKILL.md): Proceed with reversible work and pause for irreversible actions or product decisions.

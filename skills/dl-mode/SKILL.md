@@ -37,6 +37,13 @@ Triggers:
 - Any prose surface → the **unslop** skill. Your reply is a prose surface.
 - Any PR-status request → the **Babysit** playbook. That includes "babysit this", "get it green", "address the review comments", "check on PR X". Never triggered by merely opening a PR.
 - CodeRabbit or another review bot commented → skeptical posture. Triage fix, dismiss, or ask per `references/coderabbit-triage.md`. Never churn code to quiet a bot.
+- Two or more fixes share a premise and fail the same gate → **principle-attack-the-premise** before attempting another fix on that premise.
+- TypeScript work in `.ts` or `.tsx` files → **typescript-best-practices**, grounded in **principle-type-system-discipline**.
+- Parallel coverage, independent audits, or competing race arms → **swarm**. For design/code alternatives requiring base selection and grafting, use **arena** instead.
+- A small or unfamiliar change has unclear downstream effects → **blast-radius** when explicitly requested or when a separate impact analysis is warranted.
+- Repeated agent mistakes in a repository → **correct** when asked to prevent recurrence; prefer structural enforcement over another reminder.
+- A project lacks a repeatable way to drive the real app → offer **create-verification-skill** when that gap blocks proving behavior. Use **maintain-verification-skill** to audit an existing feature map.
+- Large multi-part work with no matching playbook → **figure-it-out**. For long unattended work or when a reviewer needs a decision trail, use **show-me-your-work**.
 - Merging or arming auto-merge → only on an explicit ask in the current turn. Babysitting never authorizes it.
 
 When **teach** applies, it runs **how** and **why** as needed. Do not duplicate their investigation.
@@ -51,6 +58,7 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 - **Build the Lever** (**principle-build-the-lever**). Any non-trivial work. Build the smallest rerunnable tool that does or proves the work instead of repeating manual steps.
 - **Subtract Before You Add** (**principle-subtract-before-you-add**). Sequencing an addition, refactor, or rewrite. Remove dead weight first, then build on the simpler base.
 - **Foundational Thinking** (**principle-foundational-thinking**). Before writing logic: core types and data structures, scaffold-vs-feature sequencing, and what concurrent actors share.
+- **Attack the Premise** (**principle-attack-the-premise**). Two or more fixes share a premise and fail the same gate. Record the premise and census which actors hold the imbalance before trying another fix.
 - **Redesign from First Principles** (**principle-redesign-from-first-principles**). Integrating a new requirement into an existing design. Redesign as if it had been foundational from day one.
 - **Minimize Reader Load** (**principle-minimize-reader-load**). Reviewing or shaping code that's hard to trace. Count layers and hidden state, collapse one-caller wrappers, shrink mutable scope.
 - **Outcome-Oriented Execution** (**principle-outcome-oriented-execution**). Planned rewrites and migrations with explicit phase boundaries. Converge on the target architecture, don't preserve throwaway compatibility states.
@@ -61,6 +69,8 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 
 - **Model the Domain** (**principle-model-the-domain**). Writing stateful logic, or code that branches a lot or repeats shape assumptions across files. Encode the domain in a fitting structure instead of scattered conditionals.
 - **Boundary Discipline** (**principle-boundary-discipline**). Wiring validation, error handling, or framework adapters. Guard at system boundaries, trust internal types, and keep business logic pure.
+- **Type System Discipline** (**principle-type-system-discipline**). Designing types or typed APIs. Make invalid states unrepresentable, validate external data at boundaries, and use compiler-checked exhaustive handling.
+- **Migrate Callers, Then Delete Legacy APIs** (**principle-migrate-callers-then-delete-legacy-apis**). Introducing a new internal API without external compatibility requirements. Migrate callers and delete the old path in the same wave.
 - **Make Operations Idempotent** (**principle-make-operations-idempotent**). Designing commands, lifecycle steps, or loops that run amid crashes and retries. Converge to the same end state.
 - **Separate Before Serializing Shared State** (**principle-separate-before-serializing-shared-state**). Concurrent actors might write the same file, branch, key, or object. Eliminate the sharing first.
 
@@ -75,6 +85,7 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 - **Fix Root Causes** (**principle-fix-root-causes**). Debugging. Trace each symptom to its root cause, reproduce first, ask why until you reach it.
 - **Sequence Verifiable Units** (**principle-sequence-verifiable-units**). Multi-step work, sweeps, migrations, and stacked delivery. End each unit in a checked state before advancing.
 - **Test Behavior, Not Implementation** (**principle-test-behavior-not-implementation**). Writing, changing, or keeping a test. Call the code the way its users do and assert the result against a literal expected value. If the test would still pass when every imported function returns `undefined`, rewrite the assertion or delete the test.
+- **Show Me Your Work** (**show-me-your-work** skill). Long-running work someone will review later. Keep an append-only decision trail with evidence pointers; leave it local unless reviewers need it.
 
 **Delegation**
 
@@ -100,6 +111,8 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 **Use the `dl-agent` subagent for any subagent you spawn inside a playbook step** (code-writing delegates, ad-hoc helpers). In Claude Code it is `coding-agent-skills:dl-agent`. In OpenCode it is `dl-agent`. `/dl-mode` and `dl-agent` route through the same rules. Routed workflow skills (`how`, `why`, `arena`, `architect`, `interrogate`, `reflect`) set their own subagent type for diverse review. Respect what the skill prescribes, don't override to `dl-agent`.
 
 **Defaults for every subagent call.** Run in the background. Pass file pointers, not inlined context.
+
+**Model routing (OpenCode).** Before spawning a `dl-agent`, read `~/.config/coding-agent-skills/models.md` if it exists and set `model` from its line under `## opencode`. Feature and Refactoring code-writing delegates use `feature, refactoring`. Bug fix delegates use `bug-fix`. Every other `dl-agent` uses `dl-agent helpers`. Defaults when the file or line is missing are `litellm/openai.gpt-6-luna#high` for code-writing delegates and `inherit-parent` for helpers. Omit `model` for `inherit-parent`. If the call rejects the model, use the default and say so. Routed workflow skills read their own lines.
 
 You own every subagent's work. Review the diff and write your own summary, don't pass through what it said.
 
@@ -133,3 +146,4 @@ Playbook `<name>` is `playbooks/<name>.md` next to this skill. Say which one you
 - **Bug fix.** A reported defect to reproduce, root-cause, and fix with runtime evidence. `playbooks/bug-fix.md`.
 - **Babysit.** Drive an open PR to ready for human approval: conflicts, review threads, CI. `playbooks/babysit.md`.
 - **Opening a PR.** Prepare commits and open a reviewable GitHub PR, when the user asks. `playbooks/opening-a-pr.md`.
+- **Figure it out.** Large or ambitious multi-part work no narrower playbook covers. Design a bespoke, verifiable workflow before coding. `figure-it-out` skill.
