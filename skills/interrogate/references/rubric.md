@@ -20,7 +20,7 @@ When you find a potential bug, trace the execution path. Don't just flag "this c
 
 Is the code fixing the actual problem or papering over a symptom?
 
-Answering this often requires looking beyond the changed files. Read the surrounding code (callers, callees, type definitions, sibling modules) and understand the architecture the change lives in. Use your file-reading and search tools to explore. Follow the call chain. Read the types. Understand why the code exists before judging whether the change addresses the right layer.
+Answering this often requires looking beyond the changed files. Read the surrounding code (callers, callees, type definitions, sibling modules) and understand the architecture the change lives in. Use the tools available to explore. Follow the call chain. Read the types. Understand why the code exists before judging whether the change addresses the right layer.
 
 - Guard clauses that mask a deeper invariant violation
 - Retry logic that hides a broken contract
@@ -38,7 +38,8 @@ Does the code fit well into the system it's part of?
 - Coupling: does this change introduce dependencies that will make future changes harder?
 - Data model fit: do the data structures match the actual access patterns? The right structure makes downstream code obvious. The wrong one fights you at every turn.
 - Bolted-on vs. integrated: was the change patched onto the existing design, or does it read as if the design always accounted for it? If the new requirement had been known from the start, would the code look like this?
-- Legacy dual-paths: does the change introduce a new API while keeping the old one alive? If there are no external consumers, migrate callers and delete the old path in the same wave. Don't leave compatibility layers that will become permanent.
+- Legacy dual-paths: does the change introduce a new API while keeping the old one alive? If there are no external consumers, apply **Migrate Callers, Then Delete Legacy APIs**: migrate callers and delete the old path in the same wave. Don't leave compatibility layers that will become permanent.
+- Type-system discipline: do types rule out invalid states and distinguish semantic values? Is external data parsed at boundaries, and is variant handling exhaustive? See **principle-type-system-discipline** and **typescript-best-practices**; do not report hypothetical invalid inputs when the types and real callers rule them out.
 
 Don't penalize simple code for lacking abstraction. Premature abstraction is worse than duplication.
 

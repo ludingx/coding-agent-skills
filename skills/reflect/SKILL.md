@@ -30,17 +30,19 @@ Launch three general-purpose subagents in parallel (`Agent` in Claude Code, `tas
 
 Run every reviewer and the synthesizer on your strongest model. When your agent offers models from more than one family, put the Tooling lens on a different family from the other two for diversity.
 
-| Lens | Prompt template |
-|---|---|
-| Judgment | `references/judgment-reviewer.md` |
-| Tooling | `references/tooling-reviewer.md` |
-| Divergent | `references/divergent-reviewer.md` |
+In OpenCode, read `~/.config/coding-agent-skills/models.md` if it exists and set each call's `model` from its role line under `## opencode`, or the default when the file or line is missing. Omit `model` for `inherit-parent`. If the call rejects a model, use its default and say so.
+
+| Lens | Role line | OpenCode default | Prompt template |
+|---|---|---|---|
+| Judgment | `reflect judgment, divergent, synthesizer` | `litellm/claude-opus-5-5#high` | `references/judgment-reviewer.md` |
+| Tooling | `reflect tooling` | `litellm/openai.gpt-6-luna#high` | `references/tooling-reviewer.md` |
+| Divergent | `reflect judgment, divergent, synthesizer` | `litellm/claude-opus-5-5#high` | `references/divergent-reviewer.md` |
 
 Pass each template verbatim, substituting the transcript path or digest where marked. Reviewers return findings in the subagent's final response.
 
 ### 3. Synthesize
 
-Run one general-purpose subagent on your strongest model, with full tool access. The synthesizer spot-verifies citations, which can require MCP access. Use `references/synthesizer.md` verbatim, with each reviewer's full output inlined where marked. Tell the synthesizer not to edit files. It returns a structured Accepted / Rejected / Backlog list.
+Run one general-purpose subagent on your strongest model, with full tool access. In OpenCode its model comes from the `reflect judgment, divergent, synthesizer` line (default `litellm/claude-opus-5-5#high`). The synthesizer spot-verifies citations, which can require MCP access. Use `references/synthesizer.md` verbatim, with each reviewer's full output inlined where marked. Tell the synthesizer not to edit files. It returns a structured Accepted / Rejected / Backlog list.
 
 ### 4. Structural enforcement check
 

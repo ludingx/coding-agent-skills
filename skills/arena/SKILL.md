@@ -27,7 +27,7 @@ The N candidates will receive the same prompt, so the prompt is the contract.
 
 1. State the artifact each candidate is producing.
 2. Derive the rubric. State what success looks like for *this* task, then turn it into 3-6 concrete gradeable criteria. The rubric is the picker's tool in Phase D. Candidates only see the task.
-3. Pick the runners. Default to three. Spawn more when the arena covers multiple design directions. Runners are `general-purpose` subagents in Claude Code and `general` subagents in OpenCode.
+3. Pick the runners. Runners are `general-purpose` subagents in Claude Code and `general` subagents in OpenCode. In OpenCode, read `~/.config/coding-agent-skills/models.md` if it exists and run one runner per entry on the `arena runners` line under `## opencode`. A caller such as **architect** may name its own line instead. When the file or line is missing, default to two runners on `litellm/claude-opus-5-5#high` and `litellm/openai.gpt-6-luna#high`. Omit `model` for an `inherit-parent` entry. If the call rejects an entry, run that seat on the default for its family (`claude-*` or `openai.*`) and say so. Spawn more runners when the arena covers multiple design directions, cycling through the list.
 4. Assign output paths. Each candidate writes to its own location (a git worktree where possible, per the **using-git-worktrees** skill, otherwise a scratch directory outside the repo such as `/tmp/arena-<slug>/candidate-<n>/`), per the **principle-separate-before-serializing-shared-state** skill.
 
 ## Phase B: Fan out
@@ -40,7 +40,7 @@ If a candidate fails to produce output, proceed with N-1 and note the dropout in
 
 ## Phase C: Cross-judge
 
-After all Phase B candidates complete, spawn one judge subagent (`general-purpose` in Claude Code, `general` in OpenCode) and tell it not to edit files. It sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with the parent's reading in Phase D, not with the candidates themselves. Don't spawn the judge while candidates are still writing.
+After all Phase B candidates complete, spawn one judge subagent (`general-purpose` in Claude Code, `general` in OpenCode) and tell it not to edit files. In OpenCode, pick its model from the `arena cross-judge pool` line under `## opencode`, choosing an entry whose family differs from the parent session's model when one exists. When the file or line is missing, the pool is `litellm/claude-opus-5-5#high` and `litellm/openai.gpt-6-luna#high`. It sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with the parent's reading in Phase D, not with the candidates themselves. Don't spawn the judge while candidates are still writing.
 
 ## Phase D: Pick a base
 
