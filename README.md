@@ -37,6 +37,8 @@ Restart Claude Code for updates to take effect.
 
 Run `/dl-mode <task>`. dl-mode stays on for the rest of the session. The plugin ships `coding-agent-skills:dl-agent`, the subagent that dl-mode spawns for playbook steps.
 
+The plugin also ships `coding-agent-skills:comment-sicko`, the subagent that the `no-comments` skill spawns.
+
 </details>
 
 <details>
@@ -78,6 +80,14 @@ mkdir -p ~/.config/opencode/agents && ln -s {repo_absolute_path}/.opencode/agent
 ```
 
 Invoke dl-mode by asking OpenCode to use the `dl-mode` skill for your task. dl-mode stays on for the rest of the session. `dl-agent` is the subagent dl-mode spawns for playbook steps.
+
+### no-comments
+
+The `no-comments` skill spawns the `comment-sicko` subagent. Link it the same way:
+
+```bash
+ln -s {repo_absolute_path}/.opencode/agents/comment-sicko.md ~/.config/opencode/agents/comment-sicko.md
+```
 
 </details>
 
@@ -130,6 +140,7 @@ The skills support different stages of software engineering work. Use the ones t
 - [`architect`](./skills/architect/SKILL.md): Explore types, signatures, and module boundaries before implementing a change.
 - [`arena`](./skills/arena/SKILL.md): Compare parallel implementations, choose a base, and graft in the strongest ideas.
 - [`interrogate`](./skills/interrogate/SKILL.md): Adversarially review a change and sort findings by actionability.
+- [`no-comments`](./skills/no-comments/SKILL.md): Strip comments before review. Spawns Comment Sicko, fixes accepted findings, and offers encodings for claimed constraints.
 - [`how`](./skills/how/SKILL.md): Explain how a subsystem works and build a working mental model of its architecture.
 - [`why`](./skills/why/SKILL.md): Investigate why code was shaped a certain way, using available evidence and explicit confidence levels.
 - [`teach`](./skills/teach/SKILL.md): Explain what something is, how it works, and why in one clear account.

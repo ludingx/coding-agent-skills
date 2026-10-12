@@ -1,42 +1,47 @@
-# Example verification feature map
+# Notes verification map
 
-This directory illustrates how to index user-facing verification journeys. Replace the sample app, preconditions, and commands with evidence from the target repository. Do not copy sample commands as if they applied to another app.
+This directory is the maintained source for verifying the user-facing behavior of Notes. Read the index before driving the app, then use the matching feature file as the recipe.
 
 ## Baseline preconditions
 
-- Start a disposable app instance using the repository's documented command.
-- Isolate its database, profile, and ports from the user's normal environment.
-- Seed only the data required by each journey.
-- Run the verification skill's read-only health check before driving the app.
-- Never drive an instance this run did not start or identify.
+- Launch Notes at `http://127.0.0.1:4173` with a disposable data directory.
+- Set `NOTES_DATA_DIR=/tmp/notes-verify-$RUN_ID` so concurrent runs do not share state.
+- Seed notes titled `Quarterly plan` and `Grocery list`.
+- Put `control-notes` and the `notes` CLI on `PATH`.
+- Run `control-notes doctor` and require the expected URL, data directory, and build revision.
+- Never drive an instance that was not started by this verification run.
 
 ## Driving conventions
 
-- Begin each journey from its stated baseline.
-- Prefer stable accessible names and documented CLI commands over DOM positions or coordinates.
-- Capture the user action and resulting state.
-- For mutations, confirm persisted state through a second user-facing read path.
-- Restore seeded state during cleanup, but preserve proof artifacts.
+- Start every recipe from the baseline state unless its preconditions say otherwise.
+- Prefer ARIA roles and accessible names over CSS selectors or DOM position.
+- Treat every command as literal. Keep quoted names and flags unchanged.
+- Run browser actions through `control-notes browser`.
+- Run terminal actions through `control-notes cli -- <command>`.
+- Restore seeded data after a mutation. Do not remove proof artifacts during cleanup.
 
-## Proof and skips
+## Proof and skip reporting
 
-- UI proof includes an app identity marker and a screenshot or accessibility snapshot when available.
-- CLI proof includes the exact command, stdout, stderr, and exit code.
-- Report an unreachable path with the attempted route and unmet prerequisite.
-- Do not mark an entry point verified because a different entry point worked.
+- Capture the user action and the resulting state, not only the final screen.
+- UI proof includes an ARIA snapshot and a screenshot with the app identity visible.
+- CLI proof includes the command, stdout, stderr, and exit code.
+- Mutation proof includes a read-only second view of the stored value.
+- Record the feature ID and entry point used with every artifact.
+- Report an unreachable path with the attempted command and the unmet precondition.
+- Do not report a skipped entry point as verified through a different path.
 
 ## Feature entry contract
 
-Each feature file describes a user-visible behavior and includes:
+Each feature file starts with an H1 title and one paragraph describing the user-visible behavior. It then uses exactly four H2 sections in this order.
 
-1. `Sub-features` with stable journey IDs.
-2. `How to get to it (user POV)` with every supported entry point.
-3. `Driving it with <harness>` with preconditions, exact actions, and observable outcomes.
-4. `Gotchas` with conditions that can invalidate the run.
+1. `Sub-features` lists short IDs with one line for each behavior.
+2. `How to get to it (user POV)` lists every user entry point.
+3. `Driving it with <harness>` starts with `Preconditions:` and uses labeled bullets that pair each user action with an exact command and observable result.
+4. `Gotchas` lists traps that can waste or invalidate a verification run.
 
-Keep implementation details out of the map unless they are needed to drive or observe the user path.
+Keep implementation details out of the map. Name only user paths, stable handles, required state, commands, and observable proof.
 
-## Example journeys
+## Features
 
-- [Create an item](./create-note.md)
-- [Search items](./search.md)
+- [Create a note](./create-note.md) covers browser and CLI creation, cancellation, persistence, and cleanup.
+- [Search notes](./search.md) covers toolbar, keyboard, and CLI search with matching, empty, and clear states.

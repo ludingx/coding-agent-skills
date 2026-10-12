@@ -1,25 +1,27 @@
 ---
 name: ketchup
-description: Catch the user up on everything in this chat since their last message, in plain language, with enough context to decide any action items. Use for /ketchup.
+description: "Catch the user up on everything in this chat since their last message, in plain words. Give each action item an executive summary with enough context to make the call. Use for /ketchup."
 disable-model-invocation: true
 ---
 
 # Ketchup
 
-Catch the user up on everything in this chat since their last message before `/ketchup`. Subagent results are not user messages. Write in the plain voice of [`bro`](../bro/SKILL.md), but skip its restating step. Assume the user remembers their last message and nothing after it. Use names for PRs, branches, and agents that the user will recognize.
+Catch the user up on everything in this chat since the last message they wrote before `/ketchup`. Notifications and subagent results are not their messages. Write in the plain voice of [`/bro`](../bro/SKILL.md), and skip its restating step. Assume the user remembers their last message and nothing after it. Call each PR, branch, or agent by a name they would know, not by a label you invented during the work.
 
 ## Gather what changed
 
-Keep the turn read-only except for creating visuals for the reply. Do not change code, start an app or job, or post anything. Collect your own work since the user's last message, subagent reports, and other messages in the chat. Check the current state of each PR, CI run, or agent this chat touched. Say which are still running or could not be checked.
+Keep this turn read-only, except for visuals you make for the reply from what you already have. Do not change code, start an app or a job, or post anything to make them. Collect your own work since that message, reports from subagents, and messages from anyone else in this chat. Check the current state of each PR, CI run, or agent this chat touched. Say which are still running and which you could not check.
 
-An action item is a decision only the user can make, such as a product choice, approval, irreversible action, or access the agent lacks. Include anything still waiting on the user, even if it was raised before their last message. Work the agent can still do is not an action item.
+An action item is a decision or step only the user can take, such as a product choice, an approval, an irreversible action, or access you lack. Include any still waiting on the user, even one raised before their last message. Work you can still do yourself is not an action item.
 
 ## Write the reply
 
-Start with one sentence saying how many action items remain, or that there are none. If nothing happened and nothing is waiting on the user, say so and stop.
+Open with one sentence that says how many action items there are, or that there are none. If nothing happened and nothing waits on the user, say so and stop.
 
-Then summarize what happened, most important first, and explain what each result means for the user. Skip steps that changed nothing. Name any work the agent can still do in one line.
+Then say what happened, most important first. Give each result and what it means for the user. Skip steps that changed nothing. Name in one line any work left that you can do yourself.
 
-For each action item, give an executive summary: the decision, why it matters now, options and their costs, a recommendation, and what happens if the user does not answer. Say when something is unknown rather than guessing. Link details when they exist, but include enough context for the user to decide without opening the link.
+Then give each action item a short executive summary. Cover the decision to make, why it matters now, the options and what each costs, your recommendation, and what happens if the user does not answer. If you do not know a part, say so instead of guessing. Link to the detail when there is one, and write the summary so the user can decide without opening it.
 
-Show the current state and options side by side when useful. Prefer an existing screenshot, video, artifact, table, diff, or diagram over dense prose. Create a visual only when it clarifies the decision. Never invent numbers or imply a screen was captured when it was not. Link only artifacts that exist.
+Show each action item as a before and after, side by side. For a choice, put the current state beside each option, or the options alone when there is no current state. Use screenshots or a video when the change is visible. Otherwise use another artifact, such as a table of numbers, a diff, or a diagram. If no visual exists yet, make one. If you cannot, say plainly that none exists. Never invent a number, and never draw or generate a picture of a screen you did not capture. Link only artifacts that exist.
+
+Prefer visuals to dense prose. Use a table, a Mermaid diagram, or a chart.

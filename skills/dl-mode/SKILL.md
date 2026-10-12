@@ -50,51 +50,51 @@ When **teach** applies, it runs **how** and **why** as needed. Do not duplicate 
 
 ## Principles
 
-Read the leaf skill in full for any principle you apply. Each entry names when it applies.
+Read the leaf skill in full for any principle you apply. Each entry names when it applies. Each leaf is the **principle-<title>** skill, with the title in kebab case, hyphens kept and other punctuation dropped, unless the entry gives its name.
 
 **Core**
 
-- **Laziness Protocol** (**principle-laziness-protocol**). Refactoring, sizing a diff, or tempted to add abstractions, layers, or signal threading. Bias to deletion and the smallest change that solves the problem.
-- **Build the Lever** (**principle-build-the-lever**). Any non-trivial work. Build the smallest rerunnable tool that does or proves the work instead of repeating manual steps.
-- **Subtract Before You Add** (**principle-subtract-before-you-add**). Sequencing an addition, refactor, or rewrite. Remove dead weight first, then build on the simpler base.
-- **Foundational Thinking** (**principle-foundational-thinking**). Before writing logic: core types and data structures, scaffold-vs-feature sequencing, and what concurrent actors share.
-- **Attack the Premise** (**principle-attack-the-premise**). Two or more fixes share a premise and fail the same gate. Record the premise and census which actors hold the imbalance before trying another fix.
-- **Redesign from First Principles** (**principle-redesign-from-first-principles**). Integrating a new requirement into an existing design. Redesign as if it had been foundational from day one.
-- **Minimize Reader Load** (**principle-minimize-reader-load**). Reviewing or shaping code that's hard to trace. Count layers and hidden state, collapse one-caller wrappers, shrink mutable scope.
-- **Outcome-Oriented Execution** (**principle-outcome-oriented-execution**). Planned rewrites and migrations with explicit phase boundaries. Converge on the target architecture, don't preserve throwaway compatibility states.
-- **Exhaust the Design Space** (**principle-exhaust-the-design-space**). A novel interaction or architectural decision with no precedent. Compare 2-3 structurally different alternatives. Use design sketches for architecture and runnable prototypes when observation can settle the choice.
-- **Experience First** (**principle-experience-first**). Product, UX, or feature-scope tradeoffs. Choose the best experience for the person using and maintaining the result, not the easiest implementation.
+- **Laziness Protocol.** Refactoring, sizing a diff, or tempted to add abstractions, layers, or signal threading. Bias to deletion and the smallest change that solves the problem.
+- **Foundational Thinking.** Before writing logic: core types and data structures, scaffold-vs-feature sequencing, what concurrent actors share.
+- **Redesign from First Principles.** Integrating a new requirement into an existing design. Redesign as if it had been foundational from day one.
+- **Attack the Premise.** Two or more fixes that share one premise have failed the same gate. Take a census of which actors hold the imbalance before the next fix, then question the premise instead of writing another fix that assumes it.
+- **Subtract Before You Add.** Sequencing an addition, refactor, or rewrite. Remove dead weight first, then build on the simpler base.
+- **Minimize Reader Load.** Reviewing or shaping code that's hard to trace. Count layers and hidden state, collapse one-caller wrappers, shrink mutable scope.
+- **Outcome-Oriented Execution.** Planned rewrites and migrations with explicit phase boundaries. Converge on the target architecture, don't preserve throwaway compatibility states.
+- **Experience First.** Product, UX, or feature-scope tradeoffs. Choose user delight over implementation convenience.
+- **Exhaust the Design Space.** A novel interaction or architectural decision with no precedent. Build 2-3 competing prototypes and compare before committing.
+- **Build the Lever.** Any non-trivial work. Build the tool that does or proves it (codemod, script, generator), not by hand. The tool is the artifact a reviewer reruns.
 
 **Architecture**
 
-- **Model the Domain** (**principle-model-the-domain**). Writing stateful logic, or code that branches a lot or repeats shape assumptions across files. Encode the domain in a fitting structure instead of scattered conditionals.
-- **Boundary Discipline** (**principle-boundary-discipline**). Wiring validation, error handling, or framework adapters. Guard at system boundaries, trust internal types, and keep business logic pure.
-- **Type System Discipline** (**principle-type-system-discipline**). Designing types or typed APIs. Make invalid states unrepresentable, validate external data at boundaries, and use compiler-checked exhaustive handling.
-- **Migrate Callers, Then Delete Legacy APIs** (**principle-migrate-callers-then-delete-legacy-apis**). Introducing a new internal API without external compatibility requirements. Migrate callers and delete the old path in the same wave.
-- **Make Operations Idempotent** (**principle-make-operations-idempotent**). Designing commands, lifecycle steps, or loops that run amid crashes and retries. Converge to the same end state.
-- **Separate Before Serializing Shared State** (**principle-separate-before-serializing-shared-state**). Concurrent actors might write the same file, branch, key, or object. Eliminate the sharing first.
+- **Model the Domain.** Writing stateful logic, or code that branches a lot or repeats a shape assumption across files. Encode the domain in a structure (state machine, typed model, table or registry, reducer, boundary, the right collection) instead of scattered conditionals.
+- **Boundary Discipline.** Wiring validation, error handling, or framework adapters. Guards at system boundaries, trust internal types, keep business logic pure.
+- **Type System Discipline.** Designing types or a signature in any typed language. Make illegal states unrepresentable, brand primitives, parse external data at boundaries.
+- **Make Operations Idempotent.** Designing commands, lifecycle steps, or loops that run amid crashes and retries. Converge to the same end state.
+- **Migrate Callers Then Delete Legacy APIs.** Introducing a new internal API while old callers exist. Migrate and delete in one wave.
+- **Separate Before Serializing Shared State.** Concurrent actors might write the same file, branch, key, or object. Eliminate the sharing first.
 
 **Clarity**
 
-- **Name the State** (**principle-name-the-state**). Writing or reviewing a condition. A guard that combines negations or checks several values inline becomes a positive, domain-named predicate negated once at the call site.
+- **Name the State.** Writing or reviewing a condition. A guard that combines negations or checks several values inline becomes a positive, domain-named predicate negated once at the call site.
 
 **Verification**
 
-- **Prove It Works** (**principle-prove-it-works**). After a task, before declaring done. Verify against the real artifact, not a proxy or "it compiles".
-- **Explain the Number** (**principle-explain-the-number**). Before trusting, reporting, or acting on a measured number. Identify what limits it and rule out other things it could have measured.
-- **Fix Root Causes** (**principle-fix-root-causes**). Debugging. Trace each symptom to its root cause, reproduce first, ask why until you reach it.
-- **Sequence Verifiable Units** (**principle-sequence-verifiable-units**). Multi-step work, sweeps, migrations, and stacked delivery. End each unit in a checked state before advancing.
-- **Test Behavior, Not Implementation** (**principle-test-behavior-not-implementation**). Writing, changing, or keeping a test. Call the code the way its users do and assert the result against a literal expected value. If the test would still pass when every imported function returns `undefined`, rewrite the assertion or delete the test.
+- **Prove It Works.** After a task, before declaring done. Verify against the real artifact, not a proxy or "it compiles".
+- **Fix Root Causes.** Debugging. Trace each symptom to its root cause, reproduce first, ask why until you reach it.
+- **Sequence Work into Verifiable Units** (**principle-sequence-verifiable-units**). Multi-step work (sweeps, migrations, runs of similar edits) and how you stack commits and PRs. Break work into small units that each end in a check, verify each before the next, and order delivery so the sequence proves itself.
+- **Test Behavior, Not Implementation.** Writing, changing, or keeping a test. Call the code the way its users do and assert the result against a literal expected value. If the test would still pass when every imported function returns `undefined`, rewrite the assertion or delete the test.
+- **Explain the Number.** Before you trust, report, or act on a number you measured (a speedup, a regression, a throughput, a latency, or an eval result). Find what limits it, and rule out that it measured something other than the work you think.
 - **Show Me Your Work** (**show-me-your-work** skill). Long-running work someone will review later. Keep an append-only decision trail with evidence pointers; leave it local unless reviewers need it.
 
 **Delegation**
 
-- **Guard the Context Window** (**principle-guard-the-context-window**). Large outputs, long files, repeated reads, and fan-out planning. Keep bulk in subagents and bring back concise findings.
-- **Never Block on the Human** (**principle-never-block-on-the-human**). When tempted to ask permission for reversible work. Proceed with a reasonable choice and report it. Pause for irreversible actions and product decisions.
+- **Guard the Context Window.** Context fills up: large outputs, long files, repeated reads, fan-out planning. Route bulk to subagents, keep summaries in the main thread.
+- **Never Block on the Human.** Tempted to ask "should I do X?" on reversible work. Proceed, present the result, let the human course-correct.
 
 **Meta**
 
-- **Encode Lessons in Structure** (**principle-encode-lessons-in-structure**). You catch yourself writing the same instruction a second time. Encode it as a lint, metadata flag, runtime check, or script instead of more text.
+- **Encode Lessons in Structure.** You catch yourself writing the same instruction a second time. Encode it as a lint, metadata flag, runtime check, or script instead of more text.
 
 ## Autonomy
 
@@ -112,7 +112,7 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 
 **Defaults for every subagent call.** Run in the background. Pass file pointers, not inlined context.
 
-**Model routing (OpenCode).** Before spawning a `dl-agent`, read `~/.config/coding-agent-skills/models.md` if it exists and set `model` from its line under `## opencode`. Feature and Refactoring code-writing delegates use `feature, refactoring`. Bug fix delegates use `bug-fix`. Every other `dl-agent` uses `dl-agent helpers`. Defaults when the file or line is missing are `litellm/openai.gpt-6-luna#high` for code-writing delegates and `inherit-parent` for helpers. Omit `model` for `inherit-parent`. If the call rejects the model, use the default and say so. Routed workflow skills read their own lines.
+**Model routing (OpenCode).** Before spawning a `dl-agent`, read `~/.config/coding-agent-skills/models.md` if it exists and set `model` from its line under `## opencode`. Feature and Refactoring code-writing delegates use `feature, refactoring`. Bug fix delegates use `bug-fix`. Every other `dl-agent` uses `dl-agent helpers`. Defaults when the file or line is missing are `litellm/openai.gpt-6-luna#high` for code-writing delegates and `inherit-parent` for helpers. Omit `model` for `inherit-parent`. If the call rejects the model, use the default and say so. If it rejects the default too, omit `model` so the role runs on the parent model, and say so. Routed workflow skills read their own lines.
 
 You own every subagent's work. Review the diff and write your own summary, don't pass through what it said.
 
